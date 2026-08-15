@@ -1,0 +1,12 @@
+.axeom {
+    button.ax-button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: var(--size-2);
+        gap: var(--size-2);
+        background: var(--ax-sea);
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.16);
+        border-radius: 2px;
+    }
+}

@@ -245,3 +245,31 @@ body.theme-light {
         border: none;
     }
 }
+figure#pause {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    img {
+        display: none;
+    }
+}
+figure#pause.paused {
+    background: rgba(0, 0, 0, 0.16);
+    box-shadow: inset 0 0 64px 12px #508c9b;
+    animation: 3s pause ease-in-out infinite;
+}
+@keyframes pause {
+    0% {
+        box-shadow: inset 0 0 64px 12px #508c9b;
+    }
+    50% {
+        box-shadow: inset 0 0 24px 6px #508c9b;
+    }
+    100% {
+        box-shadow: inset 0 0 64px 12px #508c9b;
+    }
+}

@@ -29,6 +29,7 @@
   "scripts": ["scripts/main.js"],
   "styles": [
     "styles/color.css",
+    "styles/form.css",
     "styles/layout.css",
     "styles/type.css",
     "styles/utilities.css",

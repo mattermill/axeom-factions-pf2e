@@ -9,7 +9,7 @@
                 </div>
                 <div class="flex gap-2 align-center">
                     {{#if isOwner}}
-                    <button type="button" class="add-faction" data-action="addFaction">
+                    <button type="button" class="ax-button add-faction" data-action="addFaction">
                         <i class="fa-solid fa-plus"></i> Add Faction
                     </button>
                     {{/if}}
@@ -29,8 +29,7 @@
         </div>
 
         {{#if isOwner}}
-        <h3>Add Reputation Event</h3>
-        <div class="add-event flex gap-2 align-center p-2">
+        <div class="event-input flex gap-2 align-center p-2">
             <select class="event-faction">
                 <option value="">Select Faction...</option>
                 {{#each factions}}
