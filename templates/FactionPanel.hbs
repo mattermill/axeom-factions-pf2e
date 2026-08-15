@@ -1,7 +1,22 @@
 <div class="axeom flex column gap-2 w-full">
+    <button type="button" class="header-control ax-button-close" data-tooltip="Close Window" aria-label="Close Window" data-action="close"><div class="inner"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7.72143 0L9.65178 1.93103L5.14762 5.14943L1.93036 9.65517L0 7.72414L4.50417 4.50575L7.72143 0Z" fill="url(#paint0_linear_2062_10998)"/>
+    <path d="M9.65178 7.72414L7.72143 9.65517L4.50417 5.14943L0 1.93103L1.93036 0L5.14762 4.50575L9.65178 7.72414Z" fill="url(#paint1_linear_2062_10998)"/>
+    <defs>
+    <linearGradient id="paint0_linear_2062_10998" x1="4.82589" y1="0" x2="4.82589" y2="9.65517" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#D9C5A7" style="stop-color:#D9C5A7;stop-color:color(display-p3 0.8515 0.7716 0.6561);stop-opacity:1;"/>
+    <stop offset="1" stop-color="#876D49" style="stop-color:#876D49;stop-color:color(display-p3 0.5302 0.4292 0.2877);stop-opacity:1;"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear_2062_10998" x1="4.82589" y1="0" x2="4.82589" y2="9.65517" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#D9C5A7" style="stop-color:#D9C5A7;stop-color:color(display-p3 0.8515 0.7716 0.6561);stop-opacity:1;"/>
+    <stop offset="1" stop-color="#876D49" style="stop-color:#876D49;stop-color:color(display-p3 0.5302 0.4292 0.2877);stop-opacity:1;"/>
+    </linearGradient>
+    </defs>
+    </svg>
+    </div></button>
     <div class="mast flex column w-full pb-5">
-        <div class="flex p-4 justify-between align-center">
-            <div class="window-title flex gap-1 align-center font-primary uppercase text-gold tracking-wide">
+        <div class="flex p-4 justify-between align-center" id="ax-window-header">
+            <div class="ax-window-title flex gap-1 align-center font-primary uppercase text-gold tracking-wide">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11.4844 16.6777L9.99805 20L8.5127 16.6777L9.99805 15.1895L11.4844 16.6777ZM17.4443 3.33203C19.0835 5.16471 19.9902 7.5373 19.9902 9.99609C19.9902 12.4549 19.0835 14.8275 17.4443 16.6602C16.5077 15.6106 15.3594 14.7705 14.0752 14.1963C12.791 13.6221 11.3999 13.3264 9.99316 13.3281C8.58707 13.3269 7.1966 13.6231 5.91309 14.1973C4.62958 14.7715 3.48213 15.6111 2.5459 16.6602C0.906724 14.8275 2.21437e-05 12.4549 0 9.99609C0 7.5373 0.906704 5.16471 2.5459 3.33203C3.48231 4.38079 4.6297 5.21976 5.91309 5.79395C7.19661 6.36818 8.58704 6.66492 9.99316 6.66406C11.3999 6.66547 12.791 6.36914 14.0752 5.79492C15.3593 5.22072 16.5075 4.38132 17.4443 3.33203ZM11.4844 3.32227L9.99805 4.80859L8.5127 3.32227L9.99805 0L11.4844 3.32227Z" fill="#AB916C" style="fill:#AB916C;fill:color(display-p3 0.6706 0.5686 0.4235);fill-opacity:1;"/>
                     </svg>
@@ -10,22 +25,25 @@
                 <div class="flex gap-2 align-center">
                     {{#if isOwner}}
                     <button type="button" class="ax-button add-faction" data-action="addFaction">
-                        <i class="fa-solid fa-plus"></i> Add Faction
+                        <div class="inner">
+                            <i class="fa-solid fa-plus"></i> Add Faction
+                        </div>
                     </button>
                     {{/if}}
-                    <button type="button" class="header-control icon fa-solid fa-xmark" data-tooltip="Close Window" aria-label="Close Window" data-action="close"></button>
                 </div>
         </div>
 
-        <div class="faction-list flex w-full gap-2">
-            {{#if hasFactions}}
-                {{#each factions}}
-                    {{> axeom-faction-banner}}
-                {{/each}}
-            {{else}}
-                <div class="no-activity">No factions yet</div>
-            {{/if}}
-        </div>
+            <div class="faction-list flex w-full gap-2">
+                {{#if hasFactions}}
+                    {{#each factions}}
+                        {{> axeom-faction-banner}}
+                    {{/each}}
+                {{else}}
+                    <div class="no-activity">No factions yet</div>
+                {{/if}}
+            </div>
+
+
         </div>
 
         <div class="event-history flex column p-3 gap-3">
@@ -101,8 +119,10 @@
                         </div>
                     </div>
                     <div class="controls-right">
-                        <button type="button" class="event-submit" data-action="submitEvent">
+                        <button type="button" class="ax-button primary event-submit" data-action="submitEvent">
+                            <div class="inner">
                             <i class="fa-solid fa-check"></i> Add Event
+                            </div>
                         </button>
                     </div>
                 </div>

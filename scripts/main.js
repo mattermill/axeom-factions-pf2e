@@ -168,6 +168,20 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       e.preventDefault();
       note.focus();
     });
+
+    // Foundry's real drag-to-move handler is bound only to the (now hidden
+    // via CSS) native .window-header - there's no public hook to attach it
+    // elsewhere. Forwarding a cloned pointerdown onto that header lets our
+    // own #ax-window-header act as the drag handle: the real header still
+    // owns pointer capture and all the actual move/resize math, we're just
+    // relaying the event that kicks it off. this.window is ApplicationV2's
+    // public accessor for those frame element references. Buttons inside
+    // (Add Faction, Close) need their own click, not a drag, so they're
+    // excluded the same way Foundry's own header excludes .header-control.
+    root.querySelector("#ax-window-header")?.addEventListener("pointerdown", (e) => {
+      if (e.target.closest("button")) return;
+      this.window.header.dispatchEvent(new PointerEvent(e.type, e));
+    });
   }
 
   static async #onAddFaction(event) {

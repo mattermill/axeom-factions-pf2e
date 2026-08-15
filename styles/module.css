@@ -1,4 +1,5 @@
 .axeom-faction-tracker {
+    overflow: visible;
     background: #17241e;
     color: var(--ax-fg);
     border: 1px solid var(--ax-gold);
@@ -10,10 +11,19 @@
     .window-header {
         background: transparent;
         border: none;
+        display: none;
     }
     .window-content {
         padding: 0;
         background: var(--ax-bg-primary);
+        overflow: visible;
+        border-radius: 1rem;
+    }
+
+    .ax-button-close {
+        position: absolute;
+        top: -0.5rem;
+        right: -0.5rem;
     }
 }
 .axeom {
@@ -25,6 +35,19 @@
             #17241e 0%,
             #0c120f 100%
         );
+    }
+
+    /* Drag handle for the whole window - see FactionTrackerApp#_onRender,
+       which forwards pointerdown here to Foundry's real (now-hidden)
+       .window-header drag handler. Buttons inside keep their own default
+       cursor via the UA stylesheet, so this doesn't need to exclude them. */
+    #ax-window-header {
+        cursor: grab;
+        user-select: none;
+
+        &:active {
+            cursor: grabbing;
+        }
     }
 
     .total-value {
