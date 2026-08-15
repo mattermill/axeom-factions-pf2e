@@ -6,7 +6,7 @@
         height: 32px;
         padding: 1px;
         background: linear-gradient(#7e7165, #634b35);
-        border-radius: 2px;
+        border-radius: 3px;
         border: none;
         color: var(--ax-bone);
         font-family: var(--font-primary);
@@ -33,11 +33,14 @@
         gap: var(--size-2);
         padding: 0 1rem;
         background: var(--ax-earth);
+        border-radius: 1.5px;
     }
     .ax-button.primary > .inner {
         background: var(--ax-sea);
     }
+}
 
+.axeom-faction-tracker {
     .ax-button-close {
         display: flex;
         align-items: center;

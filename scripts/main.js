@@ -129,6 +129,35 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       if (actor.id === this.actor.id) this.render();
     };
     Hooks.on("updateActor", this._onUpdateActor);
+
+    // The close button is appended directly to the frame (a sibling of
+    // .window-content) rather than rendered inside our template, so it can
+    // visually overlap the window's rounded corner without .window-content
+    // needing overflow: visible - which would also break the rounding on
+    // its own actual content (.mast's gradient, the scrollable faction
+    // list, etc). Frame children created here survive every later render,
+    // since only .window-content's innerHTML gets replaced - so this only
+    // needs to run once. data-action="close" still works with no extra
+    // wiring: Foundry's action-click delegation is bound to the whole
+    // frame element, not scoped to .window-content.
+    this.element.insertAdjacentHTML(
+      "beforeend",
+      `<button type="button" class="header-control ax-button-close" data-tooltip="Close Window" aria-label="Close Window" data-action="close"><div class="inner"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7.72143 0L9.65178 1.93103L5.14762 5.14943L1.93036 9.65517L0 7.72414L4.50417 4.50575L7.72143 0Z" fill="url(#paint0_linear_2062_10998)"/>
+      <path d="M9.65178 7.72414L7.72143 9.65517L4.50417 5.14943L0 1.93103L1.93036 0L5.14762 4.50575L9.65178 7.72414Z" fill="url(#paint1_linear_2062_10998)"/>
+      <defs>
+      <linearGradient id="paint0_linear_2062_10998" x1="4.82589" y1="0" x2="4.82589" y2="9.65517" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D9C5A7" style="stop-color:#D9C5A7;stop-color:color(display-p3 0.8515 0.7716 0.6561);stop-opacity:1;"/>
+      <stop offset="1" stop-color="#876D49" style="stop-color:#876D49;stop-color:color(display-p3 0.5302 0.4292 0.2877);stop-opacity:1;"/>
+      </linearGradient>
+      <linearGradient id="paint1_linear_2062_10998" x1="4.82589" y1="0" x2="4.82589" y2="9.65517" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D9C5A7" style="stop-color:#D9C5A7;stop-color:color(display-p3 0.8515 0.7716 0.6561);stop-opacity:1;"/>
+      <stop offset="1" stop-color="#876D49" style="stop-color:#876D49;stop-color:color(display-p3 0.5302 0.4292 0.2877);stop-opacity:1;"/>
+      </linearGradient>
+      </defs>
+      </svg>
+      </div></button>`,
+    );
   }
 
   _onClose(options) {

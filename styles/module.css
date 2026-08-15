@@ -16,7 +16,7 @@
     .window-content {
         padding: 0;
         background: var(--ax-bg-primary);
-        overflow: visible;
+        overflow: hidden;
         border-radius: 1rem;
     }
 
@@ -37,16 +37,14 @@
         );
     }
 
-    /* Drag handle for the whole window - see FactionTrackerApp#_onRender,
-       which forwards pointerdown here to Foundry's real (now-hidden)
-       .window-header drag handler. Buttons inside keep their own default
-       cursor via the UA stylesheet, so this doesn't need to exclude them. */
     #ax-window-header {
         cursor: grab;
         user-select: none;
+        transition: background 200ms cubic-bezier(0.75, 0, 0.25, 1);
 
         &:active {
             cursor: grabbing;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
         }
     }
 
