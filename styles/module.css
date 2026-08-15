@@ -204,46 +204,18 @@
         }
     }
 
-    .row-framed {
-        border-image-repeat: repeat;
-        border-image-slice: 11;
-        border-image-source: url("../assets/frame-elegant.svg");
-        border-image-width: 14px;
-        border-style: double;
+    .event-input {
+        padding: 1rem;
+        background: var(--ax-soot);
+        border: 1px solid #7e7165;
+        margin-top: -2rem;
+        border-radius: var(--size-2);
     }
-
-    table td:not(:first-child),
-    table th:not(:first-child) {
-        text-align: center;
-    }
-
-    table {
-        border: none;
+    .event-note {
         background: none;
-        th {
-            padding: 0px;
-        }
-        td {
-            padding: var(--size-4) var(--size-2);
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
-        }
-        tr {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-        thead {
-            background: transparent;
-            border: none;
-
-            th {
-                vertical-align: bottom;
-            }
-        }
-        td .rep-control {
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        td:hover .rep-control {
-            opacity: 1;
-        }
+        color: var(--ax-fg);
+        padding: none;
+        outline: none;
+        border: none;
     }
 }

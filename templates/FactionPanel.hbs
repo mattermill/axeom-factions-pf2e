@@ -1,5 +1,5 @@
 <div class="axeom flex column gap-2 w-full">
-    <div class="mast flex column gap-2 w-full pb-4">
+    <div class="mast flex column w-full pb-5">
         <div class="flex p-4 justify-between align-center">
             <div class="window-title flex gap-1 align-center font-primary uppercase text-gold tracking-wide">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,102 +28,107 @@
         </div>
         </div>
 
-        {{#if isOwner}}
-        <div class="event-input flex gap-2 align-center p-2">
-            <select class="event-faction">
-                <option value="">Select Faction...</option>
-                {{#each factions}}
-                <option value="{{id}}" {{#if (eq id ../draft.factionId)}}selected{{/if}}>{{name}}</option>
-                {{/each}}
-            </select>
-
-            <div class="flex gap-1 align-center">
-                <button
-                    type="button"
-                    class="event-decrease"
-                    data-action="adjustAmount"
-                    data-amount="-5"
-                    title="Decrease by 5"
-                >
-                    <i class="fa-solid fa-angles-down"></i>
-                </button>
-                <button
-                    type="button"
-                    class="event-decrease"
-                    data-action="adjustAmount"
-                    data-amount="-1"
-                    title="Decrease by 1"
-                >
-                    <i class="fa-solid fa-minus"></i>
-                </button>
+        <div class="event-history flex column p-3 gap-3">
+            {{#if isOwner}}
+            <div class="event-input flex column gap-2 p-2">
                 <input
-                    type="number"
-                    class="event-amount"
-                    value="{{draft.amount}}"
-                    style="width: 4rem; text-align: center"
+                    type="text"
+                    class="event-note flex-1"
+                    placeholder="Add a note..."
+                    value="{{draft.note}}"
                     autocomplete="off"
                     data-1p-ignore
                     data-lpignore="true"
                     data-bwignore
                     data-form-type="other"
                 />
-                <button
-                    type="button"
-                    class="event-increase"
-                    data-action="adjustAmount"
-                    data-amount="1"
-                    title="Increase by 1"
-                >
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-                <button
-                    type="button"
-                    class="event-increase"
-                    data-action="adjustAmount"
-                    data-amount="5"
-                    title="Increase by 5"
-                >
-                    <i class="fa-solid fa-angles-up"></i>
-                </button>
+                <div class="event-details flex justify-between">
+                    <div class="controls-left flex gap-1">
+                        <select class="event-faction">
+                            <option value="">Select Faction...</option>
+                            {{#each factions}}
+                            <option value="{{id}}" {{#if (eq id ../draft.factionId)}}selected{{/if}}>{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <div class="flex gap-1 align-center">
+                            <button
+                                type="button"
+                                class="event-decrease"
+                                data-action="adjustAmount"
+                                data-amount="-5"
+                                title="Decrease by 5"
+                            >
+                                <i class="fa-solid fa-angles-down"></i>
+                            </button>
+                            <button
+                                type="button"
+                                class="event-decrease"
+                                data-action="adjustAmount"
+                                data-amount="-1"
+                                title="Decrease by 1"
+                            >
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <input
+                                type="number"
+                                class="event-amount"
+                                value="{{draft.amount}}"
+                                style="width: 4rem; text-align: center"
+                                autocomplete="off"
+                                data-1p-ignore
+                                data-lpignore="true"
+                                data-bwignore
+                                data-form-type="other"
+                            />
+                            <button
+                                type="button"
+                                class="event-increase"
+                                data-action="adjustAmount"
+                                data-amount="1"
+                                title="Increase by 1"
+                            >
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                            <button
+                                type="button"
+                                class="event-increase"
+                                data-action="adjustAmount"
+                                data-amount="5"
+                                title="Increase by 5"
+                            >
+                                <i class="fa-solid fa-angles-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="controls-right">
+                        <button type="button" class="event-submit" data-action="submitEvent">
+                            <i class="fa-solid fa-check"></i> Add Event
+                        </button>
+                    </div>
+                </div>
             </div>
+            {{/if}}
 
-            <input
-                type="text"
-                class="event-note flex-1"
-                placeholder="Add a note..."
-                value="{{draft.note}}"
-                autocomplete="off"
-                data-1p-ignore
-                data-lpignore="true"
-                data-bwignore
-                data-form-type="other"
-            />
-
-            <button type="button" class="event-submit" data-action="submitEvent">
-                <i class="fa-solid fa-check"></i> Add Event
-            </button>
-        </div>
-        {{/if}}
-
-        <div class="event-log flex column gap-1">
-            {{#each events}}
-            <div class="event-entry flex gap-2 align-center p-1 {{#if positive}}positive{{else}}negative{{/if}}" data-faction-id="{{factionId}}">
-                <span class="event-entry-faction bold">{{factionName}}</span>
-                <span class="event-entry-amount {{#if positive}}positive{{else}}negative{{/if}}">{{sign}}{{amount}}</span>
-                <span class="event-entry-note flex-1">{{note}}</span>
-                {{#if ../isOwner}}
-                <button
-                    type="button"
-                    class="event-remove"
-                    data-action="removeEvent"
-                    data-faction-id="{{factionId}}"
-                    data-event-id="{{id}}"
-                    title="Remove"
-                >
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-                {{/if}}
+            <div class="event-log flex column gap-1">
+                {{#each events}}
+                <div class="event-entry flex gap-2 align-center p-1 {{#if positive}}positive{{else}}negative{{/if}}" data-faction-id="{{factionId}}">
+                    <span class="event-entry-faction bold">{{factionName}}</span>
+                    <span class="event-entry-amount {{#if positive}}positive{{else}}negative{{/if}}">{{sign}}{{amount}}</span>
+                    <span class="event-entry-note flex-1">{{note}}</span>
+                    {{#if ../isOwner}}
+                    <button
+                        type="button"
+                        class="event-remove"
+                        data-action="removeEvent"
+                        data-faction-id="{{factionId}}"
+                        data-event-id="{{id}}"
+                        title="Remove"
+                    >
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    {{/if}}
+                </div>
+                {{/each}}
             </div>
-            {{/each}}
         </div>
 </div>
