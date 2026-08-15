@@ -111,8 +111,8 @@
     /* Faction banner */
     .faction-banner {
         position: relative;
-        width: 33.333%;
-        min-width: 240px;
+        width: 260px;
+        flex-shrink: 0;
         font-family: var(--serif);
         background: radial-gradient(
             155.48% 83.46% at 50% 16.54%,
@@ -182,9 +182,68 @@
         background: var(--rep-hunted);
     }
 
+    /* Carousel - see FactionTrackerApp#_setupCarousel in scripts/main.js for
+       the drag/momentum/snap behavior. .faction-list is purely the clipping
+       viewport (no native scrolling at all, so no scrollbar to hide);
+       .faction-track is the flex row that actually gets translateX'd. */
+    .faction-carousel {
+        position: relative;
+    }
+
     .faction-list {
         max-width: 100%;
-        overflow-x: scroll;
+        overflow: hidden;
+    }
+
+    .faction-track {
+        flex-wrap: nowrap;
+        cursor: grab;
+        user-select: none;
+        touch-action: pan-y;
+        will-change: transform;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+
+    .carousel-arrow {
+        position: absolute;
+        top: 50%;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        transform: translateY(-50%);
+        background: rgba(17, 17, 17, 0.8);
+        border: 1px solid var(--ax-gold);
+        border-radius: 50%;
+        color: var(--ax-fg);
+        cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
+        transition:
+            opacity 300ms cubic-bezier(0.75, 0, 0.25, 1),
+            background 300ms cubic-bezier(0.75, 0, 0.25, 1);
+
+        &:hover {
+            background: rgba(17, 17, 17, 1);
+        }
+
+        &.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    }
+
+    .carousel-arrow-left {
+        left: var(--size-2);
+    }
+
+    .carousel-arrow-right {
+        right: var(--size-2);
     }
 
     .faction-symbol {

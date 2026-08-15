@@ -18,13 +18,27 @@
                 </div>
         </div>
 
-            <div class="faction-list flex w-full gap-2">
+            <div class="faction-carousel">
                 {{#if hasFactions}}
-                    {{#each factions}}
-                        {{> axeom-faction-banner}}
-                    {{/each}}
-                {{else}}
-                    <div class="no-activity">No factions yet</div>
+                <button type="button" class="carousel-arrow carousel-arrow-left" data-action="carouselPrev" aria-label="Scroll factions left">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                {{/if}}
+                <div class="faction-list">
+                    {{#if hasFactions}}
+                    <div class="faction-track flex gap-2 pl-4 pr-4">
+                        {{#each factions}}
+                            {{> axeom-faction-banner}}
+                        {{/each}}
+                    </div>
+                    {{else}}
+                        <div class="no-activity">No factions yet</div>
+                    {{/if}}
+                </div>
+                {{#if hasFactions}}
+                <button type="button" class="carousel-arrow carousel-arrow-right" data-action="carouselNext" aria-label="Scroll factions right">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
                 {{/if}}
             </div>
 

@@ -163,12 +163,14 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
   _onClose(options) {
     super._onClose(options);
     Hooks.off("updateActor", this._onUpdateActor);
+    this._carouselResizeObserver?.disconnect();
     if (openTracker === this) openTracker = null;
   }
 
   async _onRender(context, options) {
     await super._onRender(context, options);
     const root = this.element;
+    this._setupCarousel();
     root.querySelector(".event-faction")?.addEventListener("change", (e) => {
       this._draft.factionId = e.currentTarget.value;
     });
@@ -211,6 +213,188 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       if (e.target.closest("button")) return;
       this.window.header.dispatchEvent(new PointerEvent(e.type, e));
     });
+  }
+
+  // Drag/momentum/snap carousel for .faction-track. Rebinds every render
+  // since .window-content's innerHTML (and therefore the track and its
+  // banners) is fully replaced each time - but this.element itself, and
+  // therefore this._carouselOffset, persists, so a background data refresh
+  // (e.g. from the updateActor hook) restores the same scroll position
+  // instead of snapping back to the start.
+  _setupCarousel() {
+    this._carouselResizeObserver?.disconnect();
+
+    const $root = $(this.element);
+    const $viewport = $root.find(".faction-list");
+    const $track = $root.find(".faction-track");
+    const $prevArrow = $root.find(".carousel-arrow-left");
+    const $nextArrow = $root.find(".carousel-arrow-right");
+    if (!$track.length) return;
+
+    const viewport = $viewport[0];
+    const track = $track[0];
+
+    let snapPoints = [0];
+    let maxScroll = 0;
+
+    // Snap points are measured from real layout, not derived from CSS
+    // widths, so they stay correct regardless of how banner sizing
+    // resolves. Each banner's snap point left-aligns it with the viewport,
+    // except any that land within NEAR_END_PX of maxScroll - those collapse
+    // into the single maxScroll point instead of surviving as a redundant,
+    // barely-different point (which otherwise produces a "ghost" tiny hop
+    // before the real one when stepping back with the arrow/momentum).
+    const NEAR_END_PX = 32;
+    const recompute = () => {
+      const banners = $track.children(".faction-banner").toArray();
+      if (!banners.length) {
+        snapPoints = [0];
+        maxScroll = 0;
+        return;
+      }
+      const trackRect = track.getBoundingClientRect();
+      const trackPaddingRight =
+        parseFloat(getComputedStyle(track).paddingRight) || 0;
+      const rawOffsets = banners.map(
+        (b) => b.getBoundingClientRect().left - trackRect.left,
+      );
+      const firstOffset = rawOffsets[0];
+      const last = banners[banners.length - 1];
+      const lastRect = last.getBoundingClientRect();
+      const contentWidth =
+        lastRect.left - trackRect.left + lastRect.width + trackPaddingRight;
+      const viewportWidth = viewport.getBoundingClientRect().width;
+      maxScroll = Math.max(0, contentWidth - viewportWidth);
+
+      const points = rawOffsets
+        .map((o) => o - firstOffset)
+        .filter((p) => maxScroll - p > NEAR_END_PX);
+      snapPoints = [...new Set([...points, maxScroll])].sort((a, b) => a - b);
+    };
+
+    const clampOffset = (x) => Math.min(Math.max(x, 0), maxScroll);
+
+    const nearestSnapPoint = (x) =>
+      snapPoints.reduce(
+        (closest, p) => (Math.abs(p - x) < Math.abs(closest - x) ? p : closest),
+        snapPoints[0],
+      );
+
+    const setOffset = (x, { animate = false } = {}) => {
+      this._carouselOffset = x;
+      $track.css(
+        "transition",
+        animate ? "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)" : "none",
+      );
+      $track.css("transform", `translateX(${-x}px)`);
+      $prevArrow.toggleClass("is-visible", x > 1);
+      $nextArrow.toggleClass("is-visible", x < maxScroll - 1);
+    };
+
+    recompute();
+    setOffset(clampOffset(this._carouselOffset ?? 0));
+
+    $prevArrow.on("click", (e) => {
+      e.preventDefault();
+      const current = this._carouselOffset ?? 0;
+      const prior = snapPoints.filter((p) => p < current - 1);
+      setOffset(prior.length ? Math.max(...prior) : 0, { animate: true });
+    });
+    $nextArrow.on("click", (e) => {
+      e.preventDefault();
+      const current = this._carouselOffset ?? 0;
+      const upcoming = snapPoints.filter((p) => p > current + 1);
+      setOffset(upcoming.length ? Math.min(...upcoming) : maxScroll, {
+        animate: true,
+      });
+    });
+
+    let dragging = false;
+    let startClientX = 0;
+    let startOffset = 0;
+    let dragDistance = 0;
+    let samples = [];
+
+    $track.on("pointerdown", (e) => {
+      // Starting on a real control (e.g. .faction-remove) must behave like
+      // a normal click, not a drag. setPointerCapture retargets *all*
+      // subsequent pointer events - including the compatibility click - to
+      // the track, which would silently break that control's own click
+      // listener even when the pointer never actually moved. So interactive
+      // descendants opt out of drag tracking entirely, the same way
+      // .event-input's controls do.
+      if (e.target.closest("button, a, select, input, textarea")) return;
+      dragging = true;
+      dragDistance = 0;
+      startClientX = e.clientX;
+      startOffset = this._carouselOffset ?? 0;
+      samples = [{ t: performance.now(), x: e.clientX }];
+      track.setPointerCapture(e.pointerId);
+      $track.css("transition", "none");
+    });
+
+    $track.on("pointermove", (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - startClientX;
+      dragDistance = Math.max(dragDistance, Math.abs(dx));
+      let next = startOffset - dx;
+      // Rubber-band resistance past either edge, rather than a hard stop.
+      if (next < 0) next /= 3;
+      else if (next > maxScroll) next = maxScroll + (next - maxScroll) / 3;
+      this._carouselOffset = next;
+      $track.css("transform", `translateX(${-next}px)`);
+      samples.push({ t: performance.now(), x: e.clientX });
+      if (samples.length > 6) samples.shift();
+    });
+
+    const endDrag = (e) => {
+      if (!dragging) return;
+      dragging = false;
+      try {
+        track.releasePointerCapture(e.pointerId);
+      } catch {
+        /* already released */
+      }
+
+      const current = this._carouselOffset ?? 0;
+      if (dragDistance < 4) {
+        // Barely moved (e.g. a rubber-banded nudge, or the start of a
+        // click) - just resettle without treating it as a drag/suppressing
+        // the click that follows.
+        setOffset(nearestSnapPoint(clampOffset(current)), { animate: true });
+        return;
+      }
+
+      // A real drag occurred - the click event that fires right after
+      // this (e.g. landing on .faction-remove) must not act as a click.
+      this._suppressCarouselClick = true;
+
+      // Momentum: project the recent drag velocity forward with a damping
+      // multiplier, then resolve to the nearest real snap point in that
+      // direction rather than landing on an arbitrary mid-banner position.
+      const recent = samples.slice(-5);
+      const first = recent[0];
+      const last = recent[recent.length - 1];
+      const dt = Math.max(1, last.t - first.t);
+      const velocity = (last.x - first.x) / dt;
+      const projected = clampOffset(current - velocity * 180);
+      setOffset(nearestSnapPoint(projected), { animate: true });
+    };
+    $track.on("pointerup", endDrag);
+    $track.on("pointercancel", endDrag);
+
+    $track.on("click", (e) => {
+      if (!this._suppressCarouselClick) return;
+      this._suppressCarouselClick = false;
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    this._carouselResizeObserver = new ResizeObserver(() => {
+      recompute();
+      setOffset(clampOffset(this._carouselOffset ?? 0));
+    });
+    this._carouselResizeObserver.observe(viewport);
   }
 
   static async #onAddFaction(event) {
