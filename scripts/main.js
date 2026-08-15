@@ -149,6 +149,25 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     root.querySelector(".event-note")?.addEventListener("input", (e) => {
       this._draft.note = e.currentTarget.value;
     });
+
+    // .event-details only stays open via :focus-within, so any mousedown
+    // inside .event-input that would otherwise blur everything (clicking
+    // padding, gaps, or a button - none of which need to hold focus
+    // themselves) has to be redirected to the note input instead of left to
+    // fall through to nothing. A specific control (the select, the amount
+    // field) still gets its own native focus/interaction untouched.
+    const eventInput = root.querySelector(".event-input");
+    const note = root.querySelector(".event-note");
+    eventInput?.addEventListener("mousedown", (e) => {
+      if (!note || e.target === note) return;
+      const control = e.target.closest("button, select, input, textarea");
+      if (control) {
+        if (control.tagName === "BUTTON") e.preventDefault();
+        return;
+      }
+      e.preventDefault();
+      note.focus();
+    });
   }
 
   static async #onAddFaction(event) {
