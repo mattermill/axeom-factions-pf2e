@@ -1,0 +1,37 @@
+@font-face {
+    font-family: "Rough Cut";
+    src:
+        url("../assets/fonts/RoughCut_Regular_Clean.woff2") format("woff2"),
+        url("../assets/fonts/RoughCut_Regular_Clean.woff") format("woff");
+    font-display: swap;
+}
+
+.axeom {
+    .font-primary {
+        font-family: var(--font-primary);
+    }
+    .bold {
+        font-weight: 600;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .uppercase {
+        text-transform: uppercase;
+    }
+    .text-gold {
+        color: var(--ax-gold);
+    }
+    .text-bone {
+        color: var(--ax-bone);
+    }
+    .tracking-wide {
+        letter-spacing: 0.05em;
+    }
+    .tracking-tight {
+        letter-spacing: -0.05em;
+    }
+    .tracking-wider {
+        letter-spacing: 0.1em;
+    }
+}

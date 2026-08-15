@@ -1,0 +1,247 @@
+:root {
+    --ax-bg: rgba(0, 0, 0, 0.9);
+    --ax-bg-primary: #111111;
+    --ax-bg-subtle: rgba(255, 255, 255, 0.05);
+    --ax-bg-hover: rgba(255, 255, 255, 0.1);
+    --ax-bg-hover-strong: rgba(255, 255, 255, 0.15);
+    --ax-bg-input: rgba(255, 255, 255, 0.1);
+    --ax-bg-input-focus: rgba(255, 255, 255, 0.15);
+    --ax-bg-value: rgba(255, 255, 255, 0.15);
+    --ax-bg-btn-hover: rgba(255, 255, 255, 0.25);
+
+    --ax-border: rgba(255, 255, 255, 0.2);
+    --ax-border-input: rgba(255, 255, 255, 0.25);
+    --ax-border-focus: rgba(0, 123, 255, 0.6);
+
+    --ax-serif: "Rough Cut", serif;
+    --ax-fg: #e7d1b1;
+    --ax-fg-muted: #d2cdbe;
+    --ax-fg-placeholder: rgba(255, 255, 255, 0.5);
+
+    --ax-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --ax-shadow-submenu: 0 6px 24px rgba(0, 0, 0, 0.6);
+    --ax-shadow-focus: 0 0 0 2px rgba(0, 123, 255, 0.2);
+
+    --ax-separator: rgba(255, 255, 255, 0.15);
+    --ax-separator-high-contrast: rgba(255, 255, 255, 0.4);
+
+    --ax-scrollbar-track: rgba(255, 255, 255, 0.05);
+    --ax-scrollbar-thumb: rgba(255, 255, 255, 0.2);
+    --ax-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
+
+    --ax-active-bg: #5a141e;
+    --ax-active-border: #821e32;
+
+    --ax-keyboard-outline: rgba(255, 255, 255, 0.3);
+
+    --font-primary: var(--ax-serif);
+}
+
+.theme-light,
+body.theme-light {
+    --ax-bg: rgba(255, 255, 255, 0.85);
+    --ax-bg-subtle: rgba(0, 0, 0, 0.03);
+    --ax-bg-hover: rgba(0, 0, 0, 0.08);
+    --ax-bg-hover-strong: rgba(0, 0, 0, 0.12);
+    --ax-bg-input: rgba(0, 0, 0, 0.05);
+    --ax-bg-input-focus: rgba(0, 0, 0, 0.08);
+    --ax-bg-value: rgba(0, 0, 0, 0.1);
+    --ax-bg-btn-hover: rgba(0, 0, 0, 0.15);
+
+    --ax-border: rgba(0, 0, 0, 0.15);
+    --ax-border-input: rgba(0, 0, 0, 0.2);
+    --ax-border-focus: rgba(0, 123, 255, 0.6);
+
+    --ax-fg: rgba(0, 0, 0, 0.85);
+    --ax-fg-muted: rgba(0, 0, 0, 0.6);
+    --ax-fg-placeholder: rgba(0, 0, 0, 0.4);
+
+    --ax-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    --ax-shadow-submenu: 0 6px 24px rgba(0, 0, 0, 0.2);
+    --ax-shadow-focus: 0 0 0 2px rgba(0, 123, 255, 0.2);
+
+    --ax-separator: rgba(0, 0, 0, 0.1);
+    --ax-separator-high-contrast: rgba(0, 0, 0, 0.3);
+
+    --ax-scrollbar-track: rgba(0, 0, 0, 0.05);
+    --ax-scrollbar-thumb: rgba(0, 0, 0, 0.15);
+    --ax-scrollbar-thumb-hover: rgba(0, 0, 0, 0.25);
+
+    --ax-active-bg: oklch(0.6119 0.1772 33.08 / 20%);
+    --ax-active-border: #d95035;
+
+    --ax-keyboard-outline: rgba(0, 0, 0, 0.3);
+}
+
+.axeom {
+    --size-1: 0.25rem;
+    --size-2: 0.5rem;
+    --size-3: 1rem;
+    --size-4: 1.5rem;
+    --size-5: 2rem;
+
+    .p-1 {
+        padding: var(--size-1);
+    }
+    .p-2 {
+        padding: var(--size-2);
+    }
+    .p-3 {
+        padding: var(--size-3);
+    }
+    .p-4 {
+        padding: var(--size-4);
+    }
+    .p-5 {
+        padding: var(--size-5);
+    }
+
+    .px-1 {
+        padding-left: var(--size-1);
+        padding-right: var(--size-1);
+    }
+    .px-2 {
+        padding-left: var(--size-2);
+        padding-right: var(--size-2);
+    }
+    .px-3 {
+        padding-left: var(--size-3);
+        padding-right: var(--size-3);
+    }
+    .px-4 {
+        padding-left: var(--size-4);
+        padding-right: var(--size-4);
+    }
+    .px-5 {
+        padding-left: var(--size-5);
+        padding-right: var(--size-5);
+    }
+
+    .py-1 {
+        padding-top: var(--size-1);
+        padding-bottom: var(--size-1);
+    }
+    .py-2 {
+        padding-top: var(--size-2);
+        padding-bottom: var(--size-2);
+    }
+    .py-3 {
+        padding-top: var(--size-3);
+        padding-bottom: var(--size-3);
+    }
+    .py-4 {
+        padding-top: var(--size-4);
+        padding-bottom: var(--size-4);
+    }
+    .py-5 {
+        padding-top: var(--size-5);
+        padding-bottom: var(--size-5);
+    }
+
+    .pb-1 {
+        padding-bottom: var(--size-1);
+    }
+    .pb-2 {
+        padding-bottom: var(--size-2);
+    }
+    .pb-3 {
+        padding-bottom: var(--size-3);
+    }
+    .pb-4 {
+        padding-bottom: var(--size-4);
+    }
+    .pb-5 {
+        padding-bottom: var(--size-5);
+    }
+
+    .pt-1 {
+        padding-top: var(--size-1);
+    }
+    .pt-2 {
+        padding-top: var(--size-2);
+    }
+    .pt-3 {
+        padding-top: var(--size-3);
+    }
+    .pt-4 {
+        padding-top: var(--size-4);
+    }
+    .pt-5 {
+        padding-top: var(--size-5);
+    }
+
+    .pl-1 {
+        padding-left: var(--size-1);
+    }
+    .pl-2 {
+        padding-left: var(--size-2);
+    }
+    .pl-3 {
+        padding-left: var(--size-3);
+    }
+    .pl-4 {
+        padding-left: var(--size-4);
+    }
+    .pl-5 {
+        padding-left: var(--size-5);
+    }
+
+    .pr-1 {
+        padding-right: var(--size-1);
+    }
+    .pr-2 {
+        padding-right: var(--size-2);
+    }
+    .pr-3 {
+        padding-right: var(--size-3);
+    }
+    .pr-4 {
+        padding-right: var(--size-4);
+    }
+    .pr-5 {
+        padding-right: var(--size-5);
+    }
+
+    .mt-1 {
+        margin-top: var(--size-1);
+    }
+    .mt-2 {
+        margin-top: var(--size-2);
+    }
+    .mt-3 {
+        margin-top: var(--size-3);
+    }
+    .mt-4 {
+        margin-top: var(--size-4);
+    }
+    .mt-5 {
+        margin-top: var(--size-5);
+    }
+
+    .mb-1 {
+        margin-bottom: var(--size-1);
+    }
+    .mb-2 {
+        margin-bottom: var(--size-2);
+    }
+    .mb-3 {
+        margin-bottom: var(--size-3);
+    }
+    .mb-4 {
+        margin-bottom: var(--size-4);
+    }
+    .mb-5 {
+        margin-bottom: var(--size-5);
+    }
+
+    .w-full {
+        width: 100%;
+    }
+    .w-half {
+        width: 50%;
+    }
+
+    img {
+        border: none;
+    }
+}

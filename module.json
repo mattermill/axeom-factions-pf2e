@@ -1,27 +1,37 @@
 {
-    "name": "realm-theme",
-    "title": "Realm - A theme for Pathfinder 2e",
-    "description": "A theme for Pathfinder 2e",
-    "authors": [
+  "id": "axeom-factions-pf2e",
+  "title": "Axeom Factions PF2e",
+  "url": "https://github.com/mattermill/axeom-factions-pf2e",
+  "description": "Faction reputation tracking for Pathfinder 2e.",
+  "version": "0.1",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "relationships": {
+    "systems": [
       {
-        "name": "mattermill"
-      }
-    ],
-    "version": "1",
-    "minimumCoreVersion": "0.8.8",
-    "scripts": [
-        "scripts/theme.js"
-      ],
-    "styles": [
-        "styles/theme.css"
-    ],
-    "languages": [
-        {
-          "lang": "en",
-          "name": "English",
-          "path": "languages/en.json"
+        "id": "pf2e",
+        "type": "system",
+        "manifest": "https://github.com/foundryvtt/pf2e/releases/latest/download/system.json",
+        "compatibility": {
+          "minimum": "5.9.0"
         }
-      ],
-      "url": "https://github.com/mattermill/realm-theme",
-      "id": "realm-theme"
-  }
+      }
+    ]
+  },
+  "authors": [
+    {
+      "name": "mattermill",
+      "flags": {}
+    }
+  ],
+  "scripts": ["scripts/main.js"],
+  "styles": [
+    "styles/color.css",
+    "styles/layout.css",
+    "styles/type.css",
+    "styles/utilities.css",
+    "styles/module.css"
+  ]
+}

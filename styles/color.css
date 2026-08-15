@@ -1,0 +1,18 @@
+:root {
+    --ax-gold: #ab916c;
+    --ax-wine: #5a141e;
+    --ax-stone: #d2cdbe;
+    --ax-slate: #202020;
+    --ax-white: #ffffff;
+    --ax-bone: #faf5f0;
+}
+
+.axeom {
+    --rep-revered: #3c005e;
+    --rep-admired: #171f69;
+    --rep-liked: #3a7b59;
+    --rep-ignored: #545469;
+    --rep-disliked: #323232;
+    --rep-hated: #2b0000;
+    --rep-hunted: #5e0000;
+}

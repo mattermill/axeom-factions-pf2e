@@ -1,0 +1,130 @@
+<div class="axeom flex column gap-2 w-full">
+    <div class="mast flex column gap-2 w-full pb-4">
+        <div class="flex p-4 justify-between align-center">
+            <div class="window-title flex gap-1 align-center font-primary uppercase text-gold tracking-wide">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.4844 16.6777L9.99805 20L8.5127 16.6777L9.99805 15.1895L11.4844 16.6777ZM17.4443 3.33203C19.0835 5.16471 19.9902 7.5373 19.9902 9.99609C19.9902 12.4549 19.0835 14.8275 17.4443 16.6602C16.5077 15.6106 15.3594 14.7705 14.0752 14.1963C12.791 13.6221 11.3999 13.3264 9.99316 13.3281C8.58707 13.3269 7.1966 13.6231 5.91309 14.1973C4.62958 14.7715 3.48213 15.6111 2.5459 16.6602C0.906724 14.8275 2.21437e-05 12.4549 0 9.99609C0 7.5373 0.906704 5.16471 2.5459 3.33203C3.48231 4.38079 4.6297 5.21976 5.91309 5.79395C7.19661 6.36818 8.58704 6.66492 9.99316 6.66406C11.3999 6.66547 12.791 6.36914 14.0752 5.79492C15.3593 5.22072 16.5075 4.38132 17.4443 3.33203ZM11.4844 3.32227L9.99805 4.80859L8.5127 3.32227L9.99805 0L11.4844 3.32227Z" fill="#AB916C" style="fill:#AB916C;fill:color(display-p3 0.6706 0.5686 0.4235);fill-opacity:1;"/>
+                    </svg>
+                    Axeom: <span class="text-bone">Factions</span>
+                </div>
+                <div class="flex gap-2 align-center">
+                    {{#if isOwner}}
+                    <button type="button" class="add-faction" data-action="addFaction">
+                        <i class="fa-solid fa-plus"></i> Add Faction
+                    </button>
+                    {{/if}}
+                    <button type="button" class="header-control icon fa-solid fa-xmark" data-tooltip="Close Window" aria-label="Close Window" data-action="close"></button>
+                </div>
+        </div>
+
+        <div class="faction-list flex w-full gap-2">
+            {{#if hasFactions}}
+                {{#each factions}}
+                    {{> axeom-faction-banner}}
+                {{/each}}
+            {{else}}
+                <div class="no-activity">No factions yet</div>
+            {{/if}}
+        </div>
+        </div>
+
+        {{#if isOwner}}
+        <h3>Add Reputation Event</h3>
+        <div class="add-event flex gap-2 align-center p-2">
+            <select class="event-faction">
+                <option value="">Select Faction...</option>
+                {{#each factions}}
+                <option value="{{id}}" {{#if (eq id ../draft.factionId)}}selected{{/if}}>{{name}}</option>
+                {{/each}}
+            </select>
+
+            <div class="flex gap-1 align-center">
+                <button
+                    type="button"
+                    class="event-decrease"
+                    data-action="adjustAmount"
+                    data-amount="-5"
+                    title="Decrease by 5"
+                >
+                    <i class="fa-solid fa-angles-down"></i>
+                </button>
+                <button
+                    type="button"
+                    class="event-decrease"
+                    data-action="adjustAmount"
+                    data-amount="-1"
+                    title="Decrease by 1"
+                >
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+                <input
+                    type="number"
+                    class="event-amount"
+                    value="{{draft.amount}}"
+                    style="width: 4rem; text-align: center"
+                    autocomplete="off"
+                    data-1p-ignore
+                    data-lpignore="true"
+                    data-bwignore
+                    data-form-type="other"
+                />
+                <button
+                    type="button"
+                    class="event-increase"
+                    data-action="adjustAmount"
+                    data-amount="1"
+                    title="Increase by 1"
+                >
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button
+                    type="button"
+                    class="event-increase"
+                    data-action="adjustAmount"
+                    data-amount="5"
+                    title="Increase by 5"
+                >
+                    <i class="fa-solid fa-angles-up"></i>
+                </button>
+            </div>
+
+            <input
+                type="text"
+                class="event-note flex-1"
+                placeholder="Add a note..."
+                value="{{draft.note}}"
+                autocomplete="off"
+                data-1p-ignore
+                data-lpignore="true"
+                data-bwignore
+                data-form-type="other"
+            />
+
+            <button type="button" class="event-submit" data-action="submitEvent">
+                <i class="fa-solid fa-check"></i> Add Event
+            </button>
+        </div>
+        {{/if}}
+
+        <div class="event-log flex column gap-1">
+            {{#each events}}
+            <div class="event-entry flex gap-2 align-center p-1 {{#if positive}}positive{{else}}negative{{/if}}" data-faction-id="{{factionId}}">
+                <span class="event-entry-faction bold">{{factionName}}</span>
+                <span class="event-entry-amount {{#if positive}}positive{{else}}negative{{/if}}">{{sign}}{{amount}}</span>
+                <span class="event-entry-note flex-1">{{note}}</span>
+                {{#if ../isOwner}}
+                <button
+                    type="button"
+                    class="event-remove"
+                    data-action="removeEvent"
+                    data-faction-id="{{factionId}}"
+                    data-event-id="{{id}}"
+                    title="Remove"
+                >
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+</div>

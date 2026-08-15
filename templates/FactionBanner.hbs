@@ -1,0 +1,40 @@
+<div
+    class="flex column align-center faction-banner row-framed"
+    data-faction-id="{{id}}"
+>
+    {{#if ../isOwner}}
+    <button
+        type="button"
+        class="faction-remove"
+        data-action="removeFaction"
+        data-faction-id="{{id}}"
+        title="Remove Faction"
+    >
+        <i class="fa-solid fa-times"></i>
+    </button>
+    {{/if}}
+    <div class="flex column gap-2 items-center w-full p-3">
+        <div class="faction-symbol {{level}}"></div>
+        <div class="faction-name">{{name}}</div>
+        <span class="rep-label {{level}}">{{levelLabel}}</span>
+        <span class="rep-value">{{reputation}}</span>
+    </div>
+
+    <div class="banner-activity w-full p-3">
+        <div class="subhead">Recent Activity</div>
+        <div class="activity-log">
+            {{#if hasEvents}} {{#each recentEvents}}
+            <div class="flex gap-2 align-center justify-between">
+                <span
+                    class="event-entry-amount {{#if positive}}positive{{else}}negative{{/if}}"
+                    >{{sign}}{{amount}}</span
+                >
+                <span class="activity-title flex-1">{{note}}</span>
+                <span class="timestamp">{{date}}</span>
+            </div>
+            {{/each}} {{else}}
+            <div class="no-activity">No activity yet</div>
+            {{/if}}
+        </div>
+    </div>
+</div>
