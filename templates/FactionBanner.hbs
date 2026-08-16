@@ -1,8 +1,9 @@
 <div
-    class="flex column align-center faction-banner row-framed"
+    class="flex column align-center faction-banner {{level}}"
     data-faction-id="{{id}}"
 >
-    {{#if ../isOwner}}
+    <div class="banner-frame"></div>
+    {{#if @root.isOwner}}
     <button
         type="button"
         class="faction-remove"
@@ -14,13 +15,18 @@
     </button>
     {{/if}}
     <div class="flex column gap-2 items-center w-full p-3">
-        <div class="faction-symbol {{level}}"></div>
-        <div class="faction-name">{{name}}</div>
-        <span class="rep-label {{level}}">{{levelLabel}}</span>
-        <span class="rep-value">{{reputation}}</span>
+        <div class="faction-symbol {{level}}">
+            <div class="symbol-inner">
+                <span>{{reputation}}</span>
+            </div>
+        </div>
+        <div class="faction-name mb-2">{{name}}</div>
+        <span class="ax-tag">
+            <span class="inner">{{levelLabel}}</span>
+        </span>
     </div>
 
-    <div class="banner-activity w-full p-3">
+    <div class="banner-activity w-full flex-1">
         <div class="subhead">Recent Activity</div>
         <div class="activity-log">
             {{#if hasEvents}} {{#each recentEvents}}

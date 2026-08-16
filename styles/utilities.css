@@ -241,6 +241,10 @@ body.theme-light {
         width: 50%;
     }
 
+    .h-full {
+        height: 100%;
+    }
+
     img {
         border: none;
     }

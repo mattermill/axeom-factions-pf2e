@@ -48,163 +48,8 @@
         }
     }
 
-    .total-value {
-        font: 500 var(--font-size-18) / 1 var(--serif);
-    }
-
-    .add-event {
-        background: rgba(0, 0, 0, 0.05);
-        border-radius: 4px;
-    }
-
-    .add-event select,
-    .add-event input[type="text"],
-    .add-event input[type="number"] {
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        border-radius: 3px;
-        padding: 4px 8px;
-    }
-
-    .add-event button {
-        padding: 4px 8px;
-        cursor: pointer;
-    }
-
-    /* Event log */
-    .event-entry {
-        background: var(--ax-bg-subtle);
-        border-radius: 3px;
-        border-left: 3px solid transparent;
-
-        &.positive {
-            border-left-color: var(--color-proficiency-expert);
-        }
-
-        &.negative {
-            border-left-color: var(--color-level-red);
-        }
-    }
-
-    .event-entry-amount {
-        font-weight: bold;
-        min-width: 3rem;
-        text-align: center;
-
-        &.positive {
-            color: var(--color-proficiency-expert);
-        }
-
-        &.negative {
-            color: var(--color-level-red);
-        }
-    }
-
-    .event-remove {
-        opacity: 0.5;
-        transition: opacity 0.2s;
-
-        &:hover {
-            opacity: 1;
-        }
-    }
-
-    /* Faction banner */
-    .faction-banner {
-        position: relative;
-        width: 260px;
-        flex-shrink: 0;
-        font-family: var(--serif);
-        background: radial-gradient(
-            155.48% 83.46% at 50% 16.54%,
-            #291f17 0%,
-            #140f0d 100%
-        );
-        border: 1px solid rgba(131, 92, 64, 0.3);
-        box-shadow:
-            0px 2px 4px 3px rgba(0, 0, 0, 0.25),
-            0px 3px 15px 3px rgba(0, 0, 0, 0.2),
-            inset 0px 0px 31.6043px 15.8022px rgba(0, 0, 0, 0.32);
-        border-radius: 16px;
-    }
-
-    .faction-remove {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        opacity: 0;
-        transition: opacity 0.2s;
-        background: rgba(0, 0, 0, 0.3);
-        border: none;
-        border-radius: 3px;
-        padding: 2px 6px;
-        cursor: pointer;
-        color: var(--color-text-light-primary);
-
-        &:hover {
-            background: var(--color-level-red);
-        }
-    }
-
-    .faction-banner:hover .faction-remove {
-        opacity: 1;
-    }
-
-    .rep-label {
-        display: inline-flex;
-        font-size: var(--font-size-10);
-        padding: 2px 8px;
-        color: var(--color-text-trait);
-        border-radius: 3px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 1rem;
-    }
-
-    .revered {
-        background: var(--rep-revered);
-    }
-    .admired {
-        background: var(--rep-admired);
-    }
-    .liked {
-        background: var(--rep-liked);
-    }
-    .ignored {
-        background: var(--rep-ignored);
-    }
-    .disliked {
-        background: var(--rep-disliked);
-    }
-    .hated {
-        background: var(--rep-hated);
-    }
-    .hunted {
-        background: var(--rep-hunted);
-    }
-
-    /* Carousel - see FactionTrackerApp#_setupCarousel in scripts/main.js for
-       the drag/momentum/snap behavior. .faction-list is purely the clipping
-       viewport (no native scrolling at all, so no scrollbar to hide);
-       .faction-track is the flex row that actually gets translateX'd. */
     .faction-carousel {
         position: relative;
-    }
-
-    .faction-list {
-        max-width: 100%;
-        overflow: hidden;
-    }
-
-    .faction-track {
-        flex-wrap: nowrap;
-        cursor: grab;
-        user-select: none;
-        touch-action: pan-y;
-        will-change: transform;
-
-        &:active {
-            cursor: grabbing;
-        }
     }
 
     .carousel-arrow {
@@ -246,26 +91,146 @@
         right: var(--size-2);
     }
 
+    .faction-list {
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .faction-track {
+        flex-wrap: nowrap;
+        cursor: grab;
+        user-select: none;
+        touch-action: pan-y;
+        will-change: transform;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+
+    .faction-banner {
+        position: relative;
+        width: 260px;
+        aspect-ratio: 4/5;
+        flex-shrink: 0;
+        font-family: var(--serif);
+        background: radial-gradient(
+            155.48% 83.46% at 50% 16.54%,
+            #291f17 0%,
+            #140f0d 100%
+        );
+        border: 1px solid rgba(131, 92, 64, 0.3);
+        box-shadow:
+            0px 2px 4px 3px rgba(0, 0, 0, 0.25),
+            0px 3px 15px 3px rgba(0, 0, 0, 0.2),
+            inset 0px 0px 31.6043px 15.8022px rgba(0, 0, 0, 0.32);
+        border-radius: 16px;
+        padding: var(--size-3);
+        position: relative;
+        transition: border 300ms cubic-bezier(0.75, 0, 0.25, 1);
+
+        &:hover {
+            border-color: rgba(131, 92, 64, 0.5);
+        }
+    }
+
+    .banner-frame {
+        border-style: solid;
+        border-width: 32px;
+        border-image-source: url("../assets/banner-frame.svg");
+        border-image-slice: 32;
+        border-image-width: 32px;
+        border-image-repeat: stretch;
+        position: absolute;
+        left: 0.5rem;
+        top: 0.5rem;
+        right: 0.5rem;
+        bottom: 0.5rem;
+        pointer-events: none;
+    }
+
+    .faction-remove {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        opacity: 0;
+        transition:
+            opacity 0.2s,
+            background 0.2s,
+            border-color 0.2s;
+        background: rgba(17, 17, 17, 0.85);
+        border: 1px solid var(--ax-gold);
+        border-radius: 50%;
+        cursor: pointer;
+        color: var(--ax-fg);
+
+        &:hover {
+            background: var(--color-level-red);
+            border-color: var(--color-level-red);
+        }
+    }
+
+    .faction-banner:hover .faction-remove {
+        opacity: 1;
+    }
+
     .faction-symbol {
         width: 64px;
         aspect-ratio: 1 / 1;
         border-radius: 50%;
-        box-shadow: inset 0 0 12px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 1.77778px 7.11111px rgba(0, 0, 0, 0.3), inset 0px 0px 4.44444px #343434;
         margin-bottom: 0.5rem;
+        padding: 3px;
+        background: #5F5C58;
+        border: 1px solid #7E7165;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    .faction-symbol > .symbol-inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 1px solid #7E7165;
+        box-shadow: 0px 1.77778px 3.55556px rgba(0, 0, 0, 0.16), inset 0px 0px 6px 4px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font: 600 var(--font-size-18) / 1 var(--font-primary);
+        text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.6);
+        color: var(--ax-bone);
     }
 
     .faction-name {
         text-align: center;
-        font: 600 var(--font-size-18) / 1 var(--serif);
+        font: 600 var(--font-size-18) / 1 var(--font-primary);
+        color: var(--ax-bone);
+        hanging-punctuation: first last;
+        text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.6);
     }
 
-    .rep-value {
-        text-align: center;
-        font: 600 2rem / 1 var(--serif);
+    .rep-label {
+        display: inline-flex;
+        font-size: var(--font-size-10);
+        padding: 2px 8px;
+        color: var(--color-text-trait);
+        border-radius: 3px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     .banner-activity {
-        border-top: 1px solid var(--color-border-divider);
+        min-height: 0;
+        background: url("../assets/divider.svg") no-repeat top center;
+        background-size: 100% auto;
+        padding: 2rem 1rem 1rem;
 
         .subhead {
             font-weight: 600;
@@ -300,7 +265,7 @@
     }
     input.event-note {
         background: none;
-        color: var(--ax-fg);
+        color: var(--ax-stone);
         padding: 0;
         outline: none;
         border: none;
@@ -326,5 +291,145 @@
         margin-top: 0;
         opacity: 1;
         transform: translateY(0);
+    }
+
+    .event-entry {
+        background: var(--ax-bg-subtle);
+        border-radius: 3px;
+        border-left: 3px solid transparent;
+
+        &.positive {
+            border-left-color: var(--color-proficiency-expert);
+        }
+
+        &.negative {
+            border-left-color: var(--color-level-red);
+        }
+    }
+
+    .event-entry-amount {
+        font-weight: bold;
+        min-width: 3rem;
+        text-align: center;
+
+        &.positive {
+            color: var(--color-proficiency-expert);
+        }
+
+        &.negative {
+            color: var(--color-level-red);
+        }
+    }
+
+    .event-remove {
+        opacity: 0.5;
+        transition: opacity 0.2s;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .total-value {
+        font: 500 var(--font-size-18) / 1 var(--serif);
+    }
+
+    .add-event {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+    }
+
+    .add-event select,
+    .add-event input[type="text"],
+    .add-event input[type="number"] {
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+        padding: 4px 8px;
+    }
+
+    .add-event button {
+        padding: 4px 8px;
+        cursor: pointer;
+    }
+
+    .rep-value {
+        text-align: center;
+        font: 600 2rem / 1 var(--serif);
+    }
+
+    .faction-banner {
+        &.revered {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #471963 0%,
+                #370257 100%
+            );
+        }
+        &.admired {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #203E47 0%,
+                #1E2D32 100%
+            );
+        }
+        &.liked {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #2f463c 0%,
+                #003321 100%
+            );
+        }
+        &.ignored {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #291f17 0%,
+                #140f0d 100%
+            );
+        }
+        &.disliked {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #291f17 0%,
+                #140f0d 100%
+            );
+        }
+        &.hated {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #5A141E 0%,
+                #31030A 100%
+            );
+        }
+        &.hunted {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #620412 0%,
+                #2E1216 100%
+            );
+        }
+    }
+    .faction-symbol {
+        &.revered > .symbol-inner {
+            background: radial-gradient(75% 70% at 50% 16%, #8041A8 0%, #471963 100%);
+        }
+        &.admired > .symbol-inner {
+            background: radial-gradient(75% 70% at 50% 16%, #1A6780 0%, #184250 100%);
+        }
+        &.liked > .symbol-inner {
+            background: radial-gradient(75% 70% at 50% 16%, #387F62 0%, #003F36 100%);
+        }
+        &.ignored > .symbol-inner {
+            background: radial-gradient(75% 70% at 50% 16%, #4D5458 0%, #2C2F31 100%);
+        }
+        &.disliked > .symbol-inner {
+            background: radial-gradient(75% 70% at 50% 16%, #635053 0%, #463336 100%);
+        }
+        &.hated > .symbol-inner {
+            background: radial-gradient(75% 70% at 50% 16%, #9C2039 0%, #590E19 100%);
+        }
+        &.hunted > .symbol-inner {
+            background: radial-gradient(50% 50% at 50% 50%, #5C0003 0%, #000000 74.04%, #C91725 100%);
+        }
+    }
     }
 }

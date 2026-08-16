@@ -26,7 +26,7 @@
                 {{/if}}
                 <div class="faction-list">
                     {{#if hasFactions}}
-                    <div class="faction-track flex gap-2 pl-4 pr-4">
+                    <div class="faction-track flex gap-4 pl-4 pr-4">
                         {{#each factions}}
                             {{> axeom-faction-banner}}
                         {{/each}}
@@ -51,7 +51,7 @@
                 <input
                     type="text"
                     class="event-note flex-1"
-                    placeholder="Add a note..."
+                    placeholder="What happened?"
                     value="{{draft.note}}"
                     autocomplete="off"
                     data-1p-ignore

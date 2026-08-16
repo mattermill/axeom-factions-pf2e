@@ -43,10 +43,6 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
   }
 
   static DEFAULT_OPTIONS = {
-    // Fixed rather than the usual "{id}"-templated id: only one instance of
-    // this app is ever open at a time (see openFactionTracker), and a fixed
-    // id/class gives module.css a stable hook for the window chrome
-    // (.axeom-faction-tracker .window-header, .window-content, etc).
     id: "axeom-faction-tracker",
     classes: ["axeom-faction-tracker"],
     tag: "div",
@@ -59,7 +55,7 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     // _updatePosition runs Number(width/height) internally), so 50dvw/80dvh
     // can't be set here directly - the launcher computes and passes the
     // equivalent pixel size from the current viewport at open time instead.
-    position: { width: 720, height: 640 },
+    position: { width: 640, height: 480 },
     actions: {
       addFaction: FactionTrackerApp.#onAddFaction,
       removeFaction: FactionTrackerApp.#onRemoveFaction,
@@ -96,7 +92,7 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
           hasEvents: events.length > 0,
         };
       })
-      .sort((a, b) => a.name.localeCompare(b.name));
+      .sort((a, b) => b.reputation - a.reputation);
 
     const allEvents = Object.entries(factions)
       .flatMap(([id, faction]) =>
@@ -130,16 +126,6 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     };
     Hooks.on("updateActor", this._onUpdateActor);
 
-    // The close button is appended directly to the frame (a sibling of
-    // .window-content) rather than rendered inside our template, so it can
-    // visually overlap the window's rounded corner without .window-content
-    // needing overflow: visible - which would also break the rounding on
-    // its own actual content (.mast's gradient, the scrollable faction
-    // list, etc). Frame children created here survive every later render,
-    // since only .window-content's innerHTML gets replaced - so this only
-    // needs to run once. data-action="close" still works with no extra
-    // wiring: Foundry's action-click delegation is bound to the whole
-    // frame element, not scoped to .window-content.
     this.element.insertAdjacentHTML(
       "beforeend",
       `<button type="button" class="header-control ax-button-close" data-tooltip="Close Window" aria-label="Close Window" data-action="close"><div class="inner"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -181,12 +167,6 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       this._draft.note = e.currentTarget.value;
     });
 
-    // .event-details only stays open via :focus-within, so any mousedown
-    // inside .event-input that would otherwise blur everything (clicking
-    // padding, gaps, or a button - none of which need to hold focus
-    // themselves) has to be redirected to the note input instead of left to
-    // fall through to nothing. A specific control (the select, the amount
-    // field) still gets its own native focus/interaction untouched.
     const eventInput = root.querySelector(".event-input");
     const note = root.querySelector(".event-note");
     eventInput?.addEventListener("mousedown", (e) => {
@@ -200,27 +180,14 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       note.focus();
     });
 
-    // Foundry's real drag-to-move handler is bound only to the (now hidden
-    // via CSS) native .window-header - there's no public hook to attach it
-    // elsewhere. Forwarding a cloned pointerdown onto that header lets our
-    // own #ax-window-header act as the drag handle: the real header still
-    // owns pointer capture and all the actual move/resize math, we're just
-    // relaying the event that kicks it off. this.window is ApplicationV2's
-    // public accessor for those frame element references. Buttons inside
-    // (Add Faction, Close) need their own click, not a drag, so they're
-    // excluded the same way Foundry's own header excludes .header-control.
-    root.querySelector("#ax-window-header")?.addEventListener("pointerdown", (e) => {
-      if (e.target.closest("button")) return;
-      this.window.header.dispatchEvent(new PointerEvent(e.type, e));
-    });
+    root
+      .querySelector("#ax-window-header")
+      ?.addEventListener("pointerdown", (e) => {
+        if (e.target.closest("button")) return;
+        this.window.header.dispatchEvent(new PointerEvent(e.type, e));
+      });
   }
 
-  // Drag/momentum/snap carousel for .faction-track. Rebinds every render
-  // since .window-content's innerHTML (and therefore the track and its
-  // banners) is fully replaced each time - but this.element itself, and
-  // therefore this._carouselOffset, persists, so a background data refresh
-  // (e.g. from the updateActor hook) restores the same scroll position
-  // instead of snapping back to the start.
   _setupCarousel() {
     this._carouselResizeObserver?.disconnect();
 
@@ -316,13 +283,6 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     let samples = [];
 
     $track.on("pointerdown", (e) => {
-      // Starting on a real control (e.g. .faction-remove) must behave like
-      // a normal click, not a drag. setPointerCapture retargets *all*
-      // subsequent pointer events - including the compatibility click - to
-      // the track, which would silently break that control's own click
-      // listener even when the pointer never actually moved. So interactive
-      // descendants opt out of drag tracking entirely, the same way
-      // .event-input's controls do.
       if (e.target.closest("button, a, select, input, textarea")) return;
       dragging = true;
       dragDistance = 0;
@@ -423,6 +383,20 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     if (!this.actor.isOwner) return;
     const { factionId } = target.dataset;
     if (!factionId) return;
+
+    const factions = this.actor.getFlag(MODULE_ID, "factions") ?? {};
+    const name = Handlebars.escapeExpression(
+      factions[factionId]?.name ?? "this faction",
+    );
+    const confirmed = await Dialog.confirm({
+      title: "Remove Faction",
+      content: `<p>Remove <strong>${name}</strong> and all of its reputation history? This cannot be undone.</p>`,
+      yes: () => true,
+      no: () => false,
+      defaultYes: false,
+    });
+    if (!confirmed) return;
+
     await this.actor.unsetFlag(MODULE_ID, `factions.${factionId}`);
     if (this._draft.factionId === factionId) this._draft.factionId = "";
   }
