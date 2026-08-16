@@ -1,18 +1,19 @@
 <div class="axeom flex column gap-2 w-full">
-    <div class="mast flex column w-full pb-5">
+    <div class="mast flex column w-full">
         <div class="flex p-4 justify-between align-center" id="ax-window-header">
-            <div class="ax-window-title flex gap-1 align-center font-primary uppercase text-gold tracking-wide">
+            <div class="ax-window-title flex gap-2 align-center font-primary uppercase text-gold tracking-wide">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11.4844 16.6777L9.99805 20L8.5127 16.6777L9.99805 15.1895L11.4844 16.6777ZM17.4443 3.33203C19.0835 5.16471 19.9902 7.5373 19.9902 9.99609C19.9902 12.4549 19.0835 14.8275 17.4443 16.6602C16.5077 15.6106 15.3594 14.7705 14.0752 14.1963C12.791 13.6221 11.3999 13.3264 9.99316 13.3281C8.58707 13.3269 7.1966 13.6231 5.91309 14.1973C4.62958 14.7715 3.48213 15.6111 2.5459 16.6602C0.906724 14.8275 2.21437e-05 12.4549 0 9.99609C0 7.5373 0.906704 5.16471 2.5459 3.33203C3.48231 4.38079 4.6297 5.21976 5.91309 5.79395C7.19661 6.36818 8.58704 6.66492 9.99316 6.66406C11.3999 6.66547 12.791 6.36914 14.0752 5.79492C15.3593 5.22072 16.5075 4.38132 17.4443 3.33203ZM11.4844 3.32227L9.99805 4.80859L8.5127 3.32227L9.99805 0L11.4844 3.32227Z" fill="#AB916C" style="fill:#AB916C;fill:color(display-p3 0.6706 0.5686 0.4235);fill-opacity:1;"/>
                     </svg>
-                    Axeom: <span class="text-bone">Factions</span>
+                    <div>Axeom: <span class="text-bone">Factions</span></div>
                 </div>
                 <div class="flex gap-2 pr-2 align-center">
                     <div class="sort-menu">
                         <button type="button" class="sort-menu-trigger" data-action="toggleSortMenu" aria-label="Sort factions" aria-haspopup="true">
-                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                            <i class="fa-sharp fa-solid fa-down-up"></i>
                         </button>
                         <div class="sort-menu-dropdown ax-menu">
+                            <div class="eyebrow p-1">Sort by…</div>
                             {{#each sortOptions}}
                             <button type="button" class="ax-menu-item{{#if active}} active{{/if}}" data-action="setSortMode" data-sort-mode="{{value}}">
                                 <span class="ax-menu-label">{{label}}</span>
@@ -82,7 +83,7 @@
                         <div class="flex gap-1 align-center">
                             <button
                                 type="button"
-                                class="event-decrease"
+                                class="event-decrease ax-icon-button"
                                 data-action="adjustAmount"
                                 data-amount="-5"
                                 title="Decrease by 5"
@@ -91,7 +92,7 @@
                             </button>
                             <button
                                 type="button"
-                                class="event-decrease"
+                                class="event-decrease ax-icon-button"
                                 data-action="adjustAmount"
                                 data-amount="-1"
                                 title="Decrease by 1"
@@ -111,7 +112,7 @@
                             />
                             <button
                                 type="button"
-                                class="event-increase"
+                                class="event-increase ax-icon-button"
                                 data-action="adjustAmount"
                                 data-amount="1"
                                 title="Increase by 1"
@@ -120,7 +121,7 @@
                             </button>
                             <button
                                 type="button"
-                                class="event-increase"
+                                class="event-increase ax-icon-button"
                                 data-action="adjustAmount"
                                 data-amount="5"
                                 title="Increase by 5"
@@ -140,11 +141,14 @@
             </div>
             {{/if}}
 
-            <div class="event-log flex column gap-1">
-                <div class="flex gap-1 uppercase">Event history</div>
+            <div class="event-log flex column">
+                <div class="flex gap-1 p-1">
+                    <span class="eyebrow">Event history</span>
+                </div>
+
                 {{#each events}}
                 <div class="event-entry flex gap-2 align-center p-1 {{#if positive}}positive{{else}}negative{{/if}}" data-faction-id="{{factionId}}">
-                    <div class="faction-symbol {{level}}" data-faction-id="{{id}}">
+                    <div class="faction-symbol {{level}}" data-faction-id="{{factionId}}">
                         <div class="symbol-inner">
                             <span class="event-entry-amount">{{sign}}{{amount}}</span>
                         </div>

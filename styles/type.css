@@ -34,4 +34,13 @@
     .tracking-wider {
         letter-spacing: 0.1em;
     }
+    .eyebrow {
+        font-family: var(--font-primary);
+        font-size: 0.75rem;
+        line-height: 1.25rem;
+        font-weight: 600;
+        color: var(--ax-gold);
+        text-transform: uppercase;
+        letter-spacing: 5%;
+    }
 }

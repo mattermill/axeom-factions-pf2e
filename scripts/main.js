@@ -7,9 +7,9 @@ const RECENT_ACTIVITY_LIMIT = 1;
 const SORT_SETTING = "factionSortMode";
 
 const FACTION_SORT_MODES = [
-  { value: "reputation", label: "By Reputation" },
+  { value: "recent", label: "Activity" },
   { value: "alphabetical", label: "Alphabetical" },
-  { value: "recent", label: "Recent Activity" },
+  { value: "reputation", label: "Reputation" },
 ];
 
 const stripLeadingThe = (name) => name.replace(/^the\s+/i, "");
@@ -43,6 +43,7 @@ const formatEvent = (event) => ({
   positive: event.amount > 0,
   note: event.note || "—",
   date: new Date(event.timestamp).toLocaleDateString(),
+  level: event.level,
 });
 
 // Reputation data lives as a flag on the Party actor (`factions.<id>`), so it
@@ -86,7 +87,7 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
   static PARTS = {
     content: {
       template: FACTION_PANEL_TEMPLATE,
-      scrollable: [""],
+      scrollable: [".event-log"],
     },
   };
 
@@ -115,13 +116,26 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       .sort(FACTION_COMPARATORS[sortMode] ?? FACTION_COMPARATORS.reputation);
 
     const allEvents = Object.entries(factions)
-      .flatMap(([id, faction]) =>
-        (faction.events ?? []).map((event) => ({
-          ...event,
-          factionId: id,
-          factionName: faction.name,
-        })),
-      )
+      .flatMap(([id, faction]) => {
+        // The symbol shown for a historical event must reflect the
+        // faction's reputation level as of that event, not its current
+        // level - so events are walked oldest-first, accumulating
+        // reputation the same way #onSubmitEvent/#onRemoveEvent do, and
+        // each event is tagged with the level that running total produced.
+        const chronological = [...(faction.events ?? [])].sort(
+          (a, b) => a.timestamp - b.timestamp,
+        );
+        let cumulative = 0;
+        return chronological.map((event) => {
+          cumulative += event.amount;
+          return {
+            ...event,
+            factionId: id,
+            factionName: faction.name,
+            level: getReputationLevel(cumulative),
+          };
+        });
+      })
       .sort((a, b) => b.timestamp - a.timestamp)
       .map(formatEvent);
 

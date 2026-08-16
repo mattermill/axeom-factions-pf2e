@@ -32,7 +32,7 @@
         align-items: center;
         gap: var(--size-2);
         padding: 0 1rem;
-        background: var(--ax-earth);
+        background: #181818;
         border-radius: 1.5px;
     }
     .ax-button.primary > .inner {
@@ -144,6 +144,30 @@
         margin: 2px 0;
         background-color: var(--ax-separator);
         pointer-events: none;
+    }
+
+    .ax-icon-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+        background: #181818;
+        border: 1px solid var(--ax-gold);
+        border-radius: 3px;
+        color: var(--ax-fg);
+        cursor: pointer;
+        transition: background 300ms cubic-bezier(0.75, 0, 0.25, 1);
+
+        &:hover {
+            background: rgba(17, 17, 17, 1);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--ax-border-focus);
+            outline-offset: 2px;
+        }
     }
 }
 

@@ -6,7 +6,7 @@
     {{#if @root.isOwner}}
     <button
         type="button"
-        class="faction-remove"
+        class="faction-remove ax-icon-button"
         data-action="removeFaction"
         data-faction-id="{{id}}"
         title="Remove Faction"
@@ -26,21 +26,25 @@
         </span>
     </div>
 
-    <div class="banner-activity w-full flex-1">
-        <div class="subhead">Recent Activity</div>
-        <div class="activity-log">
-            {{#if hasEvents}} {{#each recentEvents}}
-            <div class="flex gap-2 align-center justify-between">
-                <span
-                    class="event-entry-amount {{#if positive}}positive{{else}}negative{{/if}}"
-                    >{{sign}}{{amount}}</span
-                >
-                <span class="activity-title flex-1">{{note}}</span>
-                <span class="timestamp">{{date}}</span>
-            </div>
-            {{/each}} {{else}}
-            <div class="no-activity">No activity yet</div>
-            {{/if}}
+    <div
+        class="banner-activity w-full flex-1 flex column gap-2 align-center justify-between"
+    >
+        {{#if hasEvents}} {{#each recentEvents}}
+
+        <div
+            class="event-entry-amount {{#if positive}}positive{{else}}negative{{/if}}"
+        >
+            {{sign}}{{amount}}
         </div>
+        <div class="activity-title flex flex-1 items-center align-center">
+            <span>{{note}}</span>
+        </div>
+        <div class="timestamp">{{date}}</div>
+
+        {{/each}} {{else}}
+        <div class="no-activity flex w-full h-full items-center align-center">
+            No activity yet
+        </div>
+        {{/if}}
     </div>
 </div>
