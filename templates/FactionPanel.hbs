@@ -8,11 +8,11 @@
                     <div>Axeom: <span class="text-bone">Factions</span></div>
                 </div>
                 <div class="flex gap-2 pr-2 align-center">
-                    <div class="sort-menu">
-                        <button type="button" class="sort-menu-trigger ax-icon-button ghost" data-action="toggleSortMenu" aria-label="Sort factions" aria-haspopup="true">
+                    <div class="ax-dropdown sort-menu">
+                        <button type="button" class="sort-menu-trigger ax-icon-button ghost" data-action="toggleDropdown" aria-label="Sort factions" aria-haspopup="true">
                             <i class="fa-sharp fa-solid fa-down-up"></i>
                         </button>
-                        <div class="sort-menu-dropdown ax-menu">
+                        <div class="ax-dropdown-menu ax-menu">
                             <div class="eyebrow p-1">Sort by…</div>
                             {{#each sortOptions}}
                             <button type="button" class="ax-menu-item{{#if active}} active{{/if}}" data-action="setSortMode" data-sort-mode="{{value}}">
@@ -145,10 +145,11 @@
             </div>
             {{/if}}
 
+            <div class="flex w-full p-1">
+                <span class="eyebrow">Event history</span>
+            </div>
+
             <div class="event-log flex column">
-                <div class="flex gap-1 p-1">
-                    <span class="eyebrow">Event history</span>
-                </div>
 
                 {{#each events}}
                 <div class="event-entry flex gap-2 align-center p-1 {{#if positive}}positive{{else}}negative{{/if}}" data-faction-id="{{factionId}}">
@@ -162,21 +163,27 @@
                             <span class="event-entry-faction bold">{{factionName}}</span>
                             <div class="timestamp">{{date}}</div>
                         </div>
-                        <span class="event-entry-note flex-1">{{note}}</span>
+                        <div class="flex w-full justify-between align-center">
+                            <div class="flex gap-1">
+                                <span class="rep-gained">{{sign}}{{amount}}</span>
+                                <span class="event-entry-note flex-1">{{note}}</span>
+                            </div>
+                            {{#if ../isOwner}}
+                            <button
+                                type="button"
+                                class="event-remove ax-icon-button ghost"
+                                data-action="removeEvent"
+                                data-faction-id="{{factionId}}"
+                                data-event-id="{{id}}"
+                                title="Remove"
+                            >
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                            {{/if}}
+                        </div>
                     </div>
 
-                    {{#if ../isOwner}}
-                    <button
-                        type="button"
-                        class="event-remove ax-icon-button ghost"
-                        data-action="removeEvent"
-                        data-faction-id="{{factionId}}"
-                        data-event-id="{{id}}"
-                        title="Remove"
-                    >
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                    {{/if}}
+
                 </div>
                 {{/each}}
             </div>

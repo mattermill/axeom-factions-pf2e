@@ -4,15 +4,28 @@
 >
     <div class="banner-frame"></div>
     {{#if @root.isOwner}}
-    <button
-        type="button"
-        class="faction-remove ax-icon-button ghost"
-        data-action="removeFaction"
-        data-faction-id="{{id}}"
-        title="Remove Faction"
-    >
-        <i class="fa-solid fa-ellipsis-vertical"></i>
-    </button>
+    <div class="ax-dropdown faction-options">
+        <button
+            type="button"
+            class="faction-options-trigger ax-icon-button ghost"
+            data-action="toggleDropdown"
+            aria-label="Faction options"
+            aria-haspopup="true"
+            title="Faction Options"
+        >
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+        <div class="ax-dropdown-menu ax-menu">
+            <button
+                type="button"
+                class="ax-menu-item"
+                data-action="removeFaction"
+                data-faction-id="{{id}}"
+            >
+                <span class="ax-menu-label">Delete Faction</span>
+            </button>
+        </div>
+    </div>
     {{/if}}
     <div class="flex column gap-2 items-center w-full p-3">
         <div class="faction-symbol {{level}}">
@@ -21,7 +34,7 @@
             </div>
         </div>
         <div class="faction-name mb-2">{{name}}</div>
-        <span class="ax-tag">
+        <span class="ax-tag {{level}}">
             <span class="inner">{{levelLabel}}</span>
         </span>
     </div>

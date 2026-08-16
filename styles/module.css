@@ -51,30 +51,6 @@
         transition: background 200ms cubic-bezier(0.75, 0, 0.25, 1);
     }
 
-    .sort-menu {
-        position: relative;
-    }
-
-    .sort-menu-dropdown {
-        position: absolute;
-        top: calc(100% + var(--size-2));
-        right: 0;
-        z-index: 2;
-        min-width: 180px;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-4px);
-        transition:
-            opacity 200ms cubic-bezier(0.75, 0, 0.25, 1),
-            transform 200ms cubic-bezier(0.75, 0, 0.25, 1);
-    }
-
-    .sort-menu.is-open .sort-menu-dropdown {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-
     .faction-carousel {
         position: relative;
     }
@@ -183,18 +159,17 @@
         pointer-events: none;
     }
 
-    .faction-remove {
+    .faction-options {
         position: absolute;
         top: 1.5rem;
         right: 1.5rem;
+        z-index: 3;
         opacity: 0;
-        transition:
-            opacity 0.2s,
-            background 0.2s,
-            border-color 0.2s;
+        transition: opacity 0.2s;
     }
 
-    .faction-banner:hover .faction-remove {
+    .faction-banner:hover .faction-options,
+    .faction-options.is-open {
         opacity: 1;
     }
 
@@ -335,7 +310,7 @@
     }
 
     .event-entry {
-        border-top: 1px solid var(--ax-earth);
+        border-top: 1px solid var(--ax-black);
     }
 
     .event-entry:nth-child(odd) {
@@ -343,8 +318,25 @@
     }
 
     .event-entry > .faction-symbol {
-        transform: scale(0.625);
+        transform: scale(0.75);
         margin: 0;
+    }
+
+    .event-entry-faction {
+        font-family: var(--ax-serif);
+        color: var(--ax-parchment);
+    }
+
+    .rep-gained {
+        color: var(--ax-bone);
+    }
+
+    .event-entry-note {
+        color: var(--ax-stone);
+    }
+
+    .event-entry .timestamp {
+        color: var(--ax-clay);
     }
 
     .event-entry-amount {
@@ -424,16 +416,16 @@
         }
         &.disliked {
             background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #291f17 0%,
-                #140f0d 100%
+                150% 80% at 50% 16%,
+                #222628 0%,
+                #171b1d 100%
             );
         }
         &.hated {
             background: radial-gradient(
                 155.48% 83.46% at 50% 16.54%,
-                #5a141e 0%,
-                #31030a 100%
+                #1a1a1a 0%,
+                #0a0a0a 100%
             );
         }
         &.hunted {
@@ -442,6 +434,29 @@
                 #620412 0%,
                 #2e1216 100%
             );
+        }
+    }
+    .ax-tag {
+        &.ignored > .inner {
+            background: var(--ax-earth);
+        }
+        &.hated > .inner {
+            background: var(--ax-wine);
+        }
+        &.disliked > .inner {
+            background: var(--ax-sea);
+        }
+        &.liked > .inner {
+            background: #185537;
+        }
+        &.admired > .inner {
+            background: #194c5d;
+        }
+        &.revered > .inner {
+            background: #290341;
+        }
+        &.hunted > .inner {
+            background: #1a1a1a;
         }
     }
     .faction-symbol {
@@ -469,15 +484,15 @@
         &.ignored > .symbol-inner {
             background: radial-gradient(
                 75% 70% at 50% 16%,
-                #4d5458 0%,
-                #2c2f31 100%
+                #423728 0%,
+                #140f0d 100%
             );
         }
         &.disliked > .symbol-inner {
             background: radial-gradient(
-                75% 70% at 50% 16%,
-                #635053 0%,
-                #463336 100%
+                155.48% 83.46% at 50% 16.54%,
+                #34484d 0%,
+                #192e33 100%
             );
         }
         &.hated > .symbol-inner {
@@ -489,10 +504,9 @@
         }
         &.hunted > .symbol-inner {
             background: radial-gradient(
-                50% 50% at 50% 50%,
-                #5c0003 0%,
-                #000000 74.04%,
-                #c91725 100%
+                155.48% 83.46% at 50% 16.54%,
+                #222628 0%,
+                #171b1d 100%
             );
         }
     }

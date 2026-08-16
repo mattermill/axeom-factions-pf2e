@@ -1,8 +1,11 @@
 :root {
+    --ax-black: #000000;
     --ax-bone: #faf5f0;
     --ax-coal: #181818;
+    --ax-clay: #706e66;
     --ax-earth: #40372a;
     --ax-gold: #ab916c;
+    --ax-parchment: #e6e1d7;
     --ax-slate: #202020;
     --ax-stone: #d2cdbe;
     --ax-sea: #192e33;

@@ -79,7 +79,7 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       removeEvent: FactionTrackerApp.#onRemoveEvent,
       adjustAmount: FactionTrackerApp.#onAdjustAmount,
       submitEvent: FactionTrackerApp.#onSubmitEvent,
-      toggleSortMenu: FactionTrackerApp.#onToggleSortMenu,
+      toggleDropdown: FactionTrackerApp.#onToggleDropdown,
       setSortMode: FactionTrackerApp.#onSetSortMode,
     },
   };
@@ -183,15 +183,17 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       </div></button>`,
     );
 
-    // Closes the sort dropdown on any click outside it. Bound once here
-    // rather than in _onRender since this.element persists across
-    // re-renders (only .window-content's innerHTML gets replaced) - a
-    // listener added on every render would stack duplicates. A click on
-    // the trigger/menu itself is contained by .sort-menu, so this leaves
-    // that click's own toggle/select action alone.
+    // Closes any open axeom dropdown (.ax-dropdown - sort menu, faction
+    // options, etc.) on a click outside it. Bound once here rather than
+    // in _onRender since this.element persists across re-renders (only
+    // .window-content's innerHTML gets replaced) - a listener added on
+    // every render would stack duplicates. A click on a dropdown's own
+    // trigger/menu is contained by .ax-dropdown, so this leaves that
+    // click's own toggle/select action alone.
     this.element.addEventListener("click", (e) => {
-      const menu = this.element.querySelector(".sort-menu", ".faction-options");
-      if (menu && !menu.contains(e.target)) menu.classList.remove("is-open");
+      this.element.querySelectorAll(".ax-dropdown.is-open").forEach((menu) => {
+        if (!menu.contains(e.target)) menu.classList.remove("is-open");
+      });
     });
   }
 
@@ -375,7 +377,7 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       }
 
       // A real drag occurred - the click event that fires right after
-      // this (e.g. landing on .faction-remove) must not act as a click.
+      // this (e.g. landing on .faction-options) must not act as a click.
       this._suppressCarouselClick = true;
 
       // Momentum: project the recent drag velocity forward with a damping
@@ -406,17 +408,26 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     this._carouselResizeObserver.observe(viewport);
   }
 
-  static #onToggleSortMenu(event) {
+  // Generic trigger for any axeom dropdown (.ax-dropdown), shared by the
+  // sort menu and the faction options menu. Opening one closes any other
+  // that's already open, so only one axeom dropdown is ever visible at once.
+  static #onToggleDropdown(event, target) {
     event.preventDefault();
     event.stopPropagation();
-    this.element.querySelector(".sort-menu")?.classList.toggle("is-open");
+    const dropdown = target.closest(".ax-dropdown");
+    if (!dropdown) return;
+    const willOpen = !dropdown.classList.contains("is-open");
+    this.element
+      .querySelectorAll(".ax-dropdown.is-open")
+      .forEach((el) => el.classList.remove("is-open"));
+    dropdown.classList.toggle("is-open", willOpen);
   }
 
   static async #onSetSortMode(event, target) {
     event.preventDefault();
     const { sortMode } = target.dataset;
     if (!sortMode) return;
-    this.element.querySelector(".sort-menu")?.classList.remove("is-open");
+    target.closest(".ax-dropdown")?.classList.remove("is-open");
     await game.settings.set(MODULE_ID, SORT_SETTING, sortMode);
     this.render();
   }
@@ -447,6 +458,7 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     if (!this.actor.isOwner) return;
     const { factionId } = target.dataset;
     if (!factionId) return;
+    target.closest(".ax-dropdown")?.classList.remove("is-open");
 
     const factions = this.actor.getFlag(MODULE_ID, "factions") ?? {};
     const name = Handlebars.escapeExpression(
