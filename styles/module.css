@@ -207,7 +207,7 @@
 
     .faction-name {
         text-align: center;
-        font: 600 var(--font-size-18) / 1 var(--font-primary);
+        font: 600 20px / 1 var(--font-primary);
         color: var(--ax-bone);
         hanging-punctuation: first last;
         text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.6);
@@ -395,9 +395,9 @@
         }
         &.admired {
             background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #203e47 0%,
-                #1e2d32 100%
+                75% 70% at 50% 20%,
+                #00323d 0%,
+                #00252e 100%
             );
         }
         &.liked {
