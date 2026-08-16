@@ -4,6 +4,22 @@ const FACTION_PANEL_TEMPLATE =
 const FACTION_BANNER_PARTIAL =
   "modules/axeom-factions-pf2e/templates/FactionBanner.hbs";
 const RECENT_ACTIVITY_LIMIT = 1;
+const SORT_SETTING = "factionSortMode";
+
+const FACTION_SORT_MODES = [
+  { value: "reputation", label: "By Reputation" },
+  { value: "alphabetical", label: "Alphabetical" },
+  { value: "recent", label: "Recent Activity" },
+];
+
+const stripLeadingThe = (name) => name.replace(/^the\s+/i, "");
+
+const FACTION_COMPARATORS = {
+  reputation: (a, b) => b.reputation - a.reputation,
+  alphabetical: (a, b) =>
+    stripLeadingThe(a.name).localeCompare(stripLeadingThe(b.name)),
+  recent: (a, b) => b.latestActivity - a.latestActivity,
+};
 
 const getReputationLevel = (value) => {
   if (value >= 30) return "revered";
@@ -62,6 +78,8 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       removeEvent: FactionTrackerApp.#onRemoveEvent,
       adjustAmount: FactionTrackerApp.#onAdjustAmount,
       submitEvent: FactionTrackerApp.#onSubmitEvent,
+      toggleSortMenu: FactionTrackerApp.#onToggleSortMenu,
+      setSortMode: FactionTrackerApp.#onSetSortMode,
     },
   };
 
@@ -75,6 +93,7 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
   async _prepareContext(_options) {
     const factions = this.actor.getFlag(MODULE_ID, "factions") ?? {};
     const isOwner = this.actor.isOwner;
+    const sortMode = game.settings.get(MODULE_ID, SORT_SETTING);
 
     const factionList = Object.entries(factions)
       .map(([id, faction]) => {
@@ -90,9 +109,10 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
           levelLabel: formatLevelLabel(level),
           recentEvents: events.slice(0, RECENT_ACTIVITY_LIMIT).map(formatEvent),
           hasEvents: events.length > 0,
+          latestActivity: events[0]?.timestamp ?? -Infinity,
         };
       })
-      .sort((a, b) => b.reputation - a.reputation);
+      .sort(FACTION_COMPARATORS[sortMode] ?? FACTION_COMPARATORS.reputation);
 
     const allEvents = Object.entries(factions)
       .flatMap(([id, faction]) =>
@@ -112,6 +132,10 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       events: allEvents,
       hasEvents: allEvents.length > 0,
       draft: this._draft,
+      sortOptions: FACTION_SORT_MODES.map((mode) => ({
+        ...mode,
+        active: mode.value === sortMode,
+      })),
     };
   }
 
@@ -144,6 +168,17 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       </svg>
       </div></button>`,
     );
+
+    // Closes the sort dropdown on any click outside it. Bound once here
+    // rather than in _onRender since this.element persists across
+    // re-renders (only .window-content's innerHTML gets replaced) - a
+    // listener added on every render would stack duplicates. A click on
+    // the trigger/menu itself is contained by .sort-menu, so this leaves
+    // that click's own toggle/select action alone.
+    this.element.addEventListener("click", (e) => {
+      const menu = this.element.querySelector(".sort-menu");
+      if (menu && !menu.contains(e.target)) menu.classList.remove("is-open");
+    });
   }
 
   _onClose(options) {
@@ -357,6 +392,21 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     this._carouselResizeObserver.observe(viewport);
   }
 
+  static #onToggleSortMenu(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.element.querySelector(".sort-menu")?.classList.toggle("is-open");
+  }
+
+  static async #onSetSortMode(event, target) {
+    event.preventDefault();
+    const { sortMode } = target.dataset;
+    if (!sortMode) return;
+    this.element.querySelector(".sort-menu")?.classList.remove("is-open");
+    await game.settings.set(MODULE_ID, SORT_SETTING, sortMode);
+    this.render();
+  }
+
   static async #onAddFaction(event) {
     event.preventDefault();
     if (!this.actor.isOwner) return;
@@ -498,6 +548,13 @@ function openFactionTracker() {
 Hooks.once("init", async () => {
   await foundry.applications.handlebars.loadTemplates({
     "axeom-faction-banner": FACTION_BANNER_PARTIAL,
+  });
+
+  game.settings.register(MODULE_ID, SORT_SETTING, {
+    scope: "client",
+    config: false,
+    type: String,
+    default: "reputation",
   });
 });
 

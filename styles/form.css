@@ -67,6 +67,84 @@
         background: var(--ax-sea);
         border-radius: 1.5px;
     }
+
+    .ax-menu {
+        display: flex;
+        flex-direction: column;
+        padding: var(--size-1);
+        background: var(--ax-bg);
+        border: 1px solid var(--ax-border);
+        border-radius: var(--size-2);
+        box-shadow: var(--ax-shadow);
+        color: var(--ax-fg);
+    }
+
+    .ax-menu-item {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: 24px;
+        flex-shrink: 0;
+        margin: 1px 0;
+        padding: 2px 6px;
+        background: none;
+        border: 1px solid transparent;
+        border-radius: var(--size-1);
+        color: var(--ax-fg);
+        font-family: var(--font-primary);
+        text-align: left;
+        cursor: pointer;
+        user-select: none;
+        transition: background 150ms cubic-bezier(0.75, 0, 0.25, 1);
+
+        &:hover:not(.active) {
+            background: var(--ax-bg-hover);
+        }
+
+        &.active {
+            background: var(--ax-active-bg);
+            border-color: var(--ax-active-border);
+            outline: none;
+            box-shadow: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--ax-border-focus);
+            outline-offset: -1px;
+        }
+    }
+
+    .ax-menu-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        margin-right: 10px;
+        flex-shrink: 0;
+        font-size: var(--font-size-10);
+        pointer-events: none;
+    }
+
+    .ax-menu-label {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        font-weight: normal;
+        font-size: var(--font-size-12);
+        color: var(--ax-fg);
+        pointer-events: none;
+    }
+
+    .ax-menu-separator {
+        height: 1px;
+        margin: 2px 0;
+        background-color: var(--ax-separator);
+        pointer-events: none;
+    }
 }
 
 .axeom-faction-tracker {

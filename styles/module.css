@@ -41,11 +41,49 @@
         cursor: grab;
         user-select: none;
         transition: background 200ms cubic-bezier(0.75, 0, 0.25, 1);
+    }
 
-        &:active {
-            cursor: grabbing;
-            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+    .sort-menu {
+        position: relative;
+    }
+
+    .sort-menu-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        width: 32px;
+        height: 32px;
+        border: 1px solid transparent;
+        border-radius: 50%;
+        color: var(--ax-fg);
+        cursor: pointer;
+        transition: background 300ms cubic-bezier(0.75, 0, 0.25, 1);
+
+        &:hover {
+            background: rgba(17, 17, 17, 0.8);
+            border-color: var(--ax-gold);
         }
+    }
+
+    .sort-menu-dropdown {
+        position: absolute;
+        top: calc(100% + var(--size-2));
+        right: 0;
+        z-index: 2;
+        min-width: 180px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-4px);
+        transition:
+            opacity 200ms cubic-bezier(0.75, 0, 0.25, 1),
+            transform 200ms cubic-bezier(0.75, 0, 0.25, 1);
+    }
+
+    .sort-menu.is-open .sort-menu-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
     }
 
     .faction-carousel {
@@ -183,23 +221,26 @@
         width: 64px;
         aspect-ratio: 1 / 1;
         border-radius: 50%;
-        box-shadow: 0px 1.77778px 7.11111px rgba(0, 0, 0, 0.3), inset 0px 0px 4.44444px #343434;
+        box-shadow:
+            0px 1.77778px 7.11111px rgba(0, 0, 0, 0.3),
+            inset 0px 0px 4.44444px #343434;
         margin-bottom: 0.5rem;
         padding: 3px;
-        background: #5F5C58;
-        border: 1px solid #7E7165;
+        background: #5f5c58;
+        border: 1px solid #7e7165;
         display: flex;
         align-items: center;
         justify-content: center;
-
     }
 
     .faction-symbol > .symbol-inner {
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        border: 1px solid #7E7165;
-        box-shadow: 0px 1.77778px 3.55556px rgba(0, 0, 0, 0.16), inset 0px 0px 6px 4px rgba(0, 0, 0, 0.2);
+        border: 1px solid #7e7165;
+        box-shadow:
+            0px 1.77778px 3.55556px rgba(0, 0, 0, 0.16),
+            inset 0px 0px 6px 4px rgba(0, 0, 0, 0.2);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -293,18 +334,8 @@
         transform: translateY(0);
     }
 
-    .event-entry {
-        background: var(--ax-bg-subtle);
-        border-radius: 3px;
-        border-left: 3px solid transparent;
-
-        &.positive {
-            border-left-color: var(--color-proficiency-expert);
-        }
-
-        &.negative {
-            border-left-color: var(--color-level-red);
-        }
+    .event-entry:nth-child(odd) {
+        background: rgba(0, 0, 0, 0.2);
     }
 
     .event-entry-amount {
@@ -319,6 +350,10 @@
         &.negative {
             color: var(--color-level-red);
         }
+    }
+
+    .event-entry > .faction-symbol {
+        transform: scale(0.625);
     }
 
     .event-remove {
@@ -368,8 +403,8 @@
         &.admired {
             background: radial-gradient(
                 155.48% 83.46% at 50% 16.54%,
-                #203E47 0%,
-                #1E2D32 100%
+                #203e47 0%,
+                #1e2d32 100%
             );
         }
         &.liked {
@@ -396,40 +431,68 @@
         &.hated {
             background: radial-gradient(
                 155.48% 83.46% at 50% 16.54%,
-                #5A141E 0%,
-                #31030A 100%
+                #5a141e 0%,
+                #31030a 100%
             );
         }
         &.hunted {
             background: radial-gradient(
                 155.48% 83.46% at 50% 16.54%,
                 #620412 0%,
-                #2E1216 100%
+                #2e1216 100%
             );
         }
     }
     .faction-symbol {
         &.revered > .symbol-inner {
-            background: radial-gradient(75% 70% at 50% 16%, #8041A8 0%, #471963 100%);
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #8041a8 0%,
+                #471963 100%
+            );
         }
         &.admired > .symbol-inner {
-            background: radial-gradient(75% 70% at 50% 16%, #1A6780 0%, #184250 100%);
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #1a6780 0%,
+                #184250 100%
+            );
         }
         &.liked > .symbol-inner {
-            background: radial-gradient(75% 70% at 50% 16%, #387F62 0%, #003F36 100%);
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #387f62 0%,
+                #003f36 100%
+            );
         }
         &.ignored > .symbol-inner {
-            background: radial-gradient(75% 70% at 50% 16%, #4D5458 0%, #2C2F31 100%);
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #4d5458 0%,
+                #2c2f31 100%
+            );
         }
         &.disliked > .symbol-inner {
-            background: radial-gradient(75% 70% at 50% 16%, #635053 0%, #463336 100%);
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #635053 0%,
+                #463336 100%
+            );
         }
         &.hated > .symbol-inner {
-            background: radial-gradient(75% 70% at 50% 16%, #9C2039 0%, #590E19 100%);
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #9c2039 0%,
+                #590e19 100%
+            );
         }
         &.hunted > .symbol-inner {
-            background: radial-gradient(50% 50% at 50% 50%, #5C0003 0%, #000000 74.04%, #C91725 100%);
+            background: radial-gradient(
+                50% 50% at 50% 50%,
+                #5c0003 0%,
+                #000000 74.04%,
+                #c91725 100%
+            );
         }
-    }
     }
 }
