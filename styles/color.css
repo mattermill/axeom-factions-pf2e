@@ -1,13 +1,16 @@
 :root {
-    --ax-gold: #ab916c;
-    --ax-wine: #5a141e;
-    --ax-stone: #d2cdbe;
-    --ax-slate: #202020;
-    --ax-white: #ffffff;
     --ax-bone: #faf5f0;
+    --ax-coal: #181818;
+    --ax-earth: #40372a;
+    --ax-gold: #ab916c;
+    --ax-slate: #202020;
+    --ax-stone: #d2cdbe;
     --ax-sea: #192e33;
     --ax-soot: #37332f;
-    --ax-earth: #40372a;
+    --ax-white: #ffffff;
+    --ax-wine: #5a141e;
+
+    --ax-linear-gold: linear-gradient(#7e7165, #634b35);
 }
 
 .axeom {

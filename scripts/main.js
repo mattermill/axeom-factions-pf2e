@@ -190,7 +190,7 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     // the trigger/menu itself is contained by .sort-menu, so this leaves
     // that click's own toggle/select action alone.
     this.element.addEventListener("click", (e) => {
-      const menu = this.element.querySelector(".sort-menu");
+      const menu = this.element.querySelector(".sort-menu", ".faction-options");
       if (menu && !menu.contains(e.target)) menu.classList.remove("is-open");
     });
   }

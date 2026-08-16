@@ -8,7 +8,7 @@
 
 .axeom {
     .font-primary {
-        font-family: var(--font-primary);
+        font-family: var(--ax-serif);
     }
     .bold {
         font-weight: 600;

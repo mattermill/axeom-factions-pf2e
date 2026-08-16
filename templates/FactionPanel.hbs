@@ -9,7 +9,7 @@
                 </div>
                 <div class="flex gap-2 pr-2 align-center">
                     <div class="sort-menu">
-                        <button type="button" class="sort-menu-trigger" data-action="toggleSortMenu" aria-label="Sort factions" aria-haspopup="true">
+                        <button type="button" class="sort-menu-trigger ax-icon-button ghost" data-action="toggleSortMenu" aria-label="Sort factions" aria-haspopup="true">
                             <i class="fa-sharp fa-solid fa-down-up"></i>
                         </button>
                         <div class="sort-menu-dropdown ax-menu">
@@ -24,7 +24,7 @@
                     {{#if isOwner}}
                     <button type="button" class="ax-button add-faction" data-action="addFaction">
                         <div class="inner">
-                            <i class="fa-solid fa-plus"></i> Add Faction
+                            Add Faction
                         </div>
                     </button>
                     {{/if}}
@@ -60,82 +60,86 @@
 
         <div class="event-history flex column p-3 gap-3">
             {{#if isOwner}}
-            <div class="event-input flex column gap-2 p-2">
-                <input
-                    type="text"
-                    class="event-note flex-1"
-                    placeholder="What happened?"
-                    value="{{draft.note}}"
-                    autocomplete="off"
-                    data-1p-ignore
-                    data-lpignore="true"
-                    data-bwignore
-                    data-form-type="other"
-                />
-                <div class="event-details flex justify-between">
-                    <div class="controls-left flex gap-1">
-                        <select class="event-faction">
-                            <option value="">Select Faction...</option>
-                            {{#each factions}}
-                            <option value="{{id}}" {{#if (eq id ../draft.factionId)}}selected{{/if}}>{{name}}</option>
-                            {{/each}}
-                        </select>
-                        <div class="flex gap-1 align-center">
-                            <button
-                                type="button"
-                                class="event-decrease ax-icon-button"
-                                data-action="adjustAmount"
-                                data-amount="-5"
-                                title="Decrease by 5"
-                            >
-                                <i class="fa-solid fa-angles-down"></i>
-                            </button>
-                            <button
-                                type="button"
-                                class="event-decrease ax-icon-button"
-                                data-action="adjustAmount"
-                                data-amount="-1"
-                                title="Decrease by 1"
-                            >
-                                <i class="fa-solid fa-minus"></i>
-                            </button>
-                            <input
-                                type="number"
-                                class="event-amount"
-                                value="{{draft.amount}}"
-                                style="width: 4rem; text-align: center"
-                                autocomplete="off"
-                                data-1p-ignore
-                                data-lpignore="true"
-                                data-bwignore
-                                data-form-type="other"
-                            />
-                            <button
-                                type="button"
-                                class="event-increase ax-icon-button"
-                                data-action="adjustAmount"
-                                data-amount="1"
-                                title="Increase by 1"
-                            >
-                                <i class="fa-solid fa-plus"></i>
-                            </button>
-                            <button
-                                type="button"
-                                class="event-increase ax-icon-button"
-                                data-action="adjustAmount"
-                                data-amount="5"
-                                title="Increase by 5"
-                            >
-                                <i class="fa-solid fa-angles-up"></i>
+            <div class="event-input">
+                <div class="inner flex column gap-2 p-3">
+                    <input
+                        type="text"
+                        class="event-note flex-1"
+                        placeholder="What happened?"
+                        value="{{draft.note}}"
+                        autocomplete="off"
+                        data-1p-ignore
+                        data-lpignore="true"
+                        data-bwignore
+                        data-form-type="other"
+                    />
+                    <div class="event-details flex justify-between">
+                        <div class="controls-left flex gap-1">
+                            <select class="event-faction">
+                                <option value="">Select Faction...</option>
+                                {{#each factions}}
+                                <option value="{{id}}" {{#if (eq id ../draft.factionId)}}selected{{/if}}>{{name}}</option>
+                                {{/each}}
+                            </select>
+                            <div class="flex gap-1 align-center">
+                                <button
+                                    type="button"
+                                    class="event-decrease ax-icon-button ghost"
+                                    data-action="adjustAmount"
+                                    data-amount="-5"
+                                    title="Decrease by 5"
+                                >
+                                    <i class="fa-solid fa-angles-down"></i>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="event-decrease ax-icon-button ghost"
+                                    data-action="adjustAmount"
+                                    data-amount="-1"
+                                    title="Decrease by 1"
+                                >
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <div class="ax-input">
+                                    <input
+                                        type="number"
+                                        class="event-amount"
+                                        value="{{draft.amount}}"
+                                        style="width: 4rem; text-align: center"
+                                        autocomplete="off"
+                                        data-1p-ignore
+                                        data-lpignore="true"
+                                        data-bwignore
+                                        data-form-type="other"
+                                    />
+                                </div>
+                                <button
+                                    type="button"
+                                    class="event-increase ax-icon-button ghost"
+                                    data-action="adjustAmount"
+                                    data-amount="1"
+                                    title="Increase by 1"
+                                >
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="event-increase ax-icon-button ghost"
+                                    data-action="adjustAmount"
+                                    data-amount="5"
+                                    title="Increase by 5"
+                                >
+                                    <i class="fa-solid fa-angles-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="controls-right">
+                            <button type="button" class="ax-button primary event-submit" data-action="submitEvent">
+                                <div class="inner">
+                                    Add Event
+                                </div>
                             </button>
                         </div>
-                    </div>
-                    <div class="controls-right">
-                        <button type="button" class="ax-button primary event-submit" data-action="submitEvent">
-                            <div class="inner">
-                            <i class="fa-solid fa-check"></i> Add Event
-                            </div>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -154,14 +158,17 @@
                         </div>
                     </div>
                     <div class="flex flex-1 column gap-1">
-                        <span class="event-entry-faction bold">{{factionName}}</span>
+                        <div class="flex w-full justify-between">
+                            <span class="event-entry-faction bold">{{factionName}}</span>
+                            <div class="timestamp">{{date}}</div>
+                        </div>
                         <span class="event-entry-note flex-1">{{note}}</span>
                     </div>
 
                     {{#if ../isOwner}}
                     <button
                         type="button"
-                        class="event-remove"
+                        class="event-remove ax-icon-button ghost"
                         data-action="removeEvent"
                         data-faction-id="{{factionId}}"
                         data-event-id="{{id}}"

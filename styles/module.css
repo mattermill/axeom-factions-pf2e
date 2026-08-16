@@ -55,25 +55,6 @@
         position: relative;
     }
 
-    .sort-menu-trigger {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        width: 32px;
-        height: 32px;
-        border: 1px solid transparent;
-        border-radius: 50%;
-        color: var(--ax-fg);
-        cursor: pointer;
-        transition: background 300ms cubic-bezier(0.75, 0, 0.25, 1);
-
-        &:hover {
-            background: rgba(17, 17, 17, 0.8);
-            border-color: var(--ax-gold);
-        }
-    }
-
     .sort-menu-dropdown {
         position: absolute;
         top: calc(100% + var(--size-2));
@@ -107,7 +88,6 @@
         justify-content: center;
         width: 32px;
         height: 32px;
-        transform: translateY(-50%);
         background: rgba(17, 17, 17, 0.8);
         border: 1px solid var(--ax-gold);
         border-radius: 50%;
@@ -117,24 +97,32 @@
         pointer-events: none;
         transition:
             opacity 300ms cubic-bezier(0.75, 0, 0.25, 1),
+            transform 300ms cubic-bezier(0.75, 0, 0.25, 1),
             background 300ms cubic-bezier(0.75, 0, 0.25, 1);
 
         &:hover {
             background: rgba(17, 17, 17, 1);
         }
-
-        &.is-visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
     }
 
+    /* .is-visible (JS-driven) is purely "can this direction be scrolled
+       to" - it never shows the arrow on its own. Actually appearing also
+       requires hovering the carousel, and slides in from off toward its
+       own edge rather than just fading in place. */
     .carousel-arrow-left {
         left: var(--size-2);
+        transform: translateY(-50%) translateX(-1rem);
     }
 
     .carousel-arrow-right {
         right: var(--size-2);
+        transform: translateY(-50%) translateX(1rem);
+    }
+
+    .faction-carousel:hover .carousel-arrow.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(-50%) translateX(0);
     }
 
     .faction-list {
@@ -197,20 +185,13 @@
 
     .faction-remove {
         position: absolute;
-        top: 4px;
-        right: 4px;
-        width: 24px;
-        height: 24px;
+        top: 1.5rem;
+        right: 1.5rem;
         opacity: 0;
         transition:
             opacity 0.2s,
             background 0.2s,
             border-color 0.2s;
-
-        &:hover {
-            background: var(--color-level-red);
-            border-color: var(--color-level-red);
-        }
     }
 
     .faction-banner:hover .faction-remove {
@@ -305,20 +286,24 @@
     }
 
     .event-input {
-        padding: 1rem;
-        background: var(--ax-soot);
-        border: 1px solid #7e7165;
+        padding: 1px;
+        background: var(--ax-linear-gold);
+        border-radius: 6px;
+        border: none;
         margin-top: -2rem;
-        border-radius: var(--size-2);
-        height: auto;
-        line-height: auto;
-        gap: var(--size-3);
         transition: border-color 300ms cubic-bezier(0.75, 0, 0.25, 1);
 
+        > .inner {
+            background: var(--ax-coal);
+            border-radius: 6px;
+            width: 100%;
+        }
+
         &:focus-within {
-            border-color: var(--ax-gold);
+            background: var(--ax-gold);
         }
     }
+
     input.event-note {
         background: none;
         color: var(--ax-stone);
@@ -331,7 +316,7 @@
 
     .event-details {
         max-height: 0;
-        margin-top: calc(-1 * var(--size-3));
+        margin-top: calc(-1 * var(--size-2));
         opacity: 0;
         overflow: hidden;
         transform: translateY(-4px);
@@ -344,7 +329,7 @@
 
     .event-input:focus-within .event-details {
         max-height: 4rem;
-        margin-top: 0;
+        margin-top: var(--size-3);
         opacity: 1;
         transform: translateY(0);
     }
@@ -370,12 +355,15 @@
     }
 
     .event-remove {
-        opacity: 0.5;
-        transition: opacity 0.2s;
+        opacity: 0;
+        transition:
+            opacity 0.2s,
+            background 300ms cubic-bezier(0.75, 0, 0.25, 1),
+            border-color 300ms cubic-bezier(0.75, 0, 0.25, 1);
+    }
 
-        &:hover {
-            opacity: 1;
-        }
+    .event-entry:hover .event-remove {
+        opacity: 1;
     }
 
     .total-value {
