@@ -5,6 +5,7 @@ const FACTION_BANNER_PARTIAL =
   "modules/axeom-factions-pf2e/templates/FactionBanner.hbs";
 const RECENT_ACTIVITY_LIMIT = 1;
 const SORT_SETTING = "factionSortMode";
+const { DialogV2 } = foundry.applications.api;
 
 const FACTION_SORT_MODES = [
   { value: "recent", label: "Activity" },
@@ -46,10 +47,6 @@ const formatEvent = (event) => ({
   level: event.level,
 });
 
-// Reputation data lives as a flag on the Party actor (`factions.<id>`), so it
-// persists to the world, syncs to every connected client, and survives
-// reloads. All rendering is derived fresh from that flag data on every call -
-// there is never a separate in-memory copy that can drift out of sync with it.
 class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.api.ApplicationV2,
 ) {
@@ -68,10 +65,6 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       icon: "fa-solid fa-flag",
       resizable: true,
     },
-    // ApplicationV2 positioning only accepts numeric pixel values (Foundry's
-    // _updatePosition runs Number(width/height) internally), so 50dvw/80dvh
-    // can't be set here directly - the launcher computes and passes the
-    // equivalent pixel size from the current viewport at open time instead.
     position: { width: 640, height: 480 },
     actions: {
       addFaction: FactionTrackerApp.#onAddFaction,
@@ -117,11 +110,6 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
 
     const allEvents = Object.entries(factions)
       .flatMap(([id, faction]) => {
-        // The symbol shown for a historical event must reflect the
-        // faction's reputation level as of that event, not its current
-        // level - so events are walked oldest-first, accumulating
-        // reputation the same way #onSubmitEvent/#onRemoveEvent do, and
-        // each event is tagged with the level that running total produced.
         const chronological = [...(faction.events ?? [])].sort(
           (a, b) => a.timestamp - b.timestamp,
         );
@@ -153,16 +141,9 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     };
   }
 
-  // This app isn't a registered document sheet, so it isn't part of
-  // actor.apps and won't auto-rerender on its own - listen for updateActor
-  // explicitly so changes from any source (this client, another player, the
-  // GM) stay in sync while the window is open.
   async _onFirstRender(context, options) {
     await super._onFirstRender(context, options);
-    this._onUpdateActor = (actor) => {
-      if (actor.id === this.actor.id) this.render();
-    };
-    Hooks.on("updateActor", this._onUpdateActor);
+    this.actor.apps[this.id] = this;
 
     this.element.insertAdjacentHTML(
       "beforeend",
@@ -183,13 +164,6 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       </div></button>`,
     );
 
-    // Closes any open axeom dropdown (.ax-dropdown - sort menu, faction
-    // options, etc.) on a click outside it. Bound once here rather than
-    // in _onRender since this.element persists across re-renders (only
-    // .window-content's innerHTML gets replaced) - a listener added on
-    // every render would stack duplicates. A click on a dropdown's own
-    // trigger/menu is contained by .ax-dropdown, so this leaves that
-    // click's own toggle/select action alone.
     this.element.addEventListener("click", (e) => {
       this.element.querySelectorAll(".ax-dropdown.is-open").forEach((menu) => {
         if (!menu.contains(e.target)) menu.classList.remove("is-open");
@@ -199,7 +173,7 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
 
   _onClose(options) {
     super._onClose(options);
-    Hooks.off("updateActor", this._onUpdateActor);
+    delete this.actor.apps[this.id];
     this._carouselResizeObserver?.disconnect();
     if (openTracker === this) openTracker = null;
   }
@@ -242,29 +216,20 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
   _setupCarousel() {
     this._carouselResizeObserver?.disconnect();
 
-    const $root = $(this.element);
-    const $viewport = $root.find(".faction-list");
-    const $track = $root.find(".faction-track");
-    const $prevArrow = $root.find(".carousel-arrow-left");
-    const $nextArrow = $root.find(".carousel-arrow-right");
-    if (!$track.length) return;
-
-    const viewport = $viewport[0];
-    const track = $track[0];
+    const viewport = this.element.querySelector(".faction-list");
+    const track = this.element.querySelector(".faction-track");
+    const prevArrow = this.element.querySelector(".carousel-arrow-left");
+    const nextArrow = this.element.querySelector(".carousel-arrow-right");
+    if (!track) return;
 
     let snapPoints = [0];
     let maxScroll = 0;
 
-    // Snap points are measured from real layout, not derived from CSS
-    // widths, so they stay correct regardless of how banner sizing
-    // resolves. Each banner's snap point left-aligns it with the viewport,
-    // except any that land within NEAR_END_PX of maxScroll - those collapse
-    // into the single maxScroll point instead of surviving as a redundant,
-    // barely-different point (which otherwise produces a "ghost" tiny hop
-    // before the real one when stepping back with the arrow/momentum).
     const NEAR_END_PX = 32;
     const recompute = () => {
-      const banners = $track.children(".faction-banner").toArray();
+      const banners = Array.from(track.children).filter((el) =>
+        el.classList.contains("faction-banner"),
+      );
       if (!banners.length) {
         snapPoints = [0];
         maxScroll = 0;
@@ -300,25 +265,24 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
 
     const setOffset = (x, { animate = false } = {}) => {
       this._carouselOffset = x;
-      $track.css(
-        "transition",
-        animate ? "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)" : "none",
-      );
-      $track.css("transform", `translateX(${-x}px)`);
-      $prevArrow.toggleClass("is-visible", x > 1);
-      $nextArrow.toggleClass("is-visible", x < maxScroll - 1);
+      track.style.transition = animate
+        ? "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)"
+        : "none";
+      track.style.transform = `translateX(${-x}px)`;
+      prevArrow?.classList.toggle("is-visible", x > 1);
+      nextArrow?.classList.toggle("is-visible", x < maxScroll - 1);
     };
 
     recompute();
     setOffset(clampOffset(this._carouselOffset ?? 0));
 
-    $prevArrow.on("click", (e) => {
+    prevArrow?.addEventListener("click", (e) => {
       e.preventDefault();
       const current = this._carouselOffset ?? 0;
       const prior = snapPoints.filter((p) => p < current - 1);
       setOffset(prior.length ? Math.max(...prior) : 0, { animate: true });
     });
-    $nextArrow.on("click", (e) => {
+    nextArrow?.addEventListener("click", (e) => {
       e.preventDefault();
       const current = this._carouselOffset ?? 0;
       const upcoming = snapPoints.filter((p) => p > current + 1);
@@ -333,7 +297,7 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     let dragDistance = 0;
     let samples = [];
 
-    $track.on("pointerdown", (e) => {
+    track.addEventListener("pointerdown", (e) => {
       if (e.target.closest("button, a, select, input, textarea")) return;
       dragging = true;
       dragDistance = 0;
@@ -341,19 +305,18 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       startOffset = this._carouselOffset ?? 0;
       samples = [{ t: performance.now(), x: e.clientX }];
       track.setPointerCapture(e.pointerId);
-      $track.css("transition", "none");
+      track.style.transition = "none";
     });
 
-    $track.on("pointermove", (e) => {
+    track.addEventListener("pointermove", (e) => {
       if (!dragging) return;
       const dx = e.clientX - startClientX;
       dragDistance = Math.max(dragDistance, Math.abs(dx));
       let next = startOffset - dx;
-      // Rubber-band resistance past either edge, rather than a hard stop.
       if (next < 0) next /= 3;
       else if (next > maxScroll) next = maxScroll + (next - maxScroll) / 3;
       this._carouselOffset = next;
-      $track.css("transform", `translateX(${-next}px)`);
+      track.style.transform = `translateX(${-next}px)`;
       samples.push({ t: performance.now(), x: e.clientX });
       if (samples.length > 6) samples.shift();
     });
@@ -363,26 +326,16 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       dragging = false;
       try {
         track.releasePointerCapture(e.pointerId);
-      } catch {
-        /* already released */
-      }
+      } catch {}
 
       const current = this._carouselOffset ?? 0;
       if (dragDistance < 4) {
-        // Barely moved (e.g. a rubber-banded nudge, or the start of a
-        // click) - just resettle without treating it as a drag/suppressing
-        // the click that follows.
         setOffset(nearestSnapPoint(clampOffset(current)), { animate: true });
         return;
       }
 
-      // A real drag occurred - the click event that fires right after
-      // this (e.g. landing on .faction-options) must not act as a click.
       this._suppressCarouselClick = true;
 
-      // Momentum: project the recent drag velocity forward with a damping
-      // multiplier, then resolve to the nearest real snap point in that
-      // direction rather than landing on an arbitrary mid-banner position.
       const recent = samples.slice(-5);
       const first = recent[0];
       const last = recent[recent.length - 1];
@@ -391,10 +344,10 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
       const projected = clampOffset(current - velocity * 180);
       setOffset(nearestSnapPoint(projected), { animate: true });
     };
-    $track.on("pointerup", endDrag);
-    $track.on("pointercancel", endDrag);
+    track.addEventListener("pointerup", endDrag);
+    track.addEventListener("pointercancel", endDrag);
 
-    $track.on("click", (e) => {
+    track.addEventListener("click", (e) => {
       if (!this._suppressCarouselClick) return;
       this._suppressCarouselClick = false;
       e.preventDefault();
@@ -408,9 +361,6 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     this._carouselResizeObserver.observe(viewport);
   }
 
-  // Generic trigger for any axeom dropdown (.ax-dropdown), shared by the
-  // sort menu and the faction options menu. Opening one closes any other
-  // that's already open, so only one axeom dropdown is ever visible at once.
   static #onToggleDropdown(event, target) {
     event.preventDefault();
     event.stopPropagation();
@@ -436,18 +386,18 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     event.preventDefault();
     if (!this.actor.isOwner) return;
 
-    const name = await Dialog.prompt({
-      title: "Add Faction",
-      content: `<form><div class="form-group"><label>Faction Name</label><input type="text" name="name" placeholder="Enter faction name..." autofocus autocomplete="off" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" /></div></form>`,
-      label: "Add Faction",
-      callback: (html) => html.find('input[name="name"]').val(),
+    const result = await DialogV2.input({
+      window: { title: "Add Faction" },
+      content: `<div class="form-group"><label>Faction Name</label><input type="text" name="name" placeholder="Enter faction name..." autofocus autocomplete="off" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" /></div>`,
+      ok: { label: "Add Faction" },
       rejectClose: false,
     });
-    if (!name?.trim()) return;
+    const name = result?.name?.trim();
+    if (!name) return;
 
     const id = foundry.utils.randomID();
     await this.actor.setFlag(MODULE_ID, `factions.${id}`, {
-      name: name.trim(),
+      name,
       reputation: 0,
       events: [],
     });
@@ -464,12 +414,11 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     const name = Handlebars.escapeExpression(
       factions[factionId]?.name ?? "this faction",
     );
-    const confirmed = await Dialog.confirm({
-      title: "Remove Faction",
+    const confirmed = await DialogV2.confirm({
+      window: { title: "Remove Faction" },
       content: `<p>Remove <strong>${name}</strong> and all of its reputation history? This cannot be undone.</p>`,
-      yes: () => true,
-      no: () => false,
-      defaultYes: false,
+      rejectClose: false,
+      no: { default: true },
     });
     if (!confirmed) return;
 
@@ -544,9 +493,6 @@ function getPartyActor() {
   return game.actors.find((a) => a.type === "party") ?? null;
 }
 
-// Single shared instance: reused (and brought to front) across clicks rather
-// than spawning a new window each time, and cleared by FactionTrackerApp
-// #_onClose when the window closes.
 let openTracker = null;
 
 function openFactionTracker() {
@@ -557,8 +503,6 @@ function openFactionTracker() {
   }
 
   if (openTracker?.rendered) {
-    // render(true) re-maximizes (if minimized) and brings the window to
-    // front - see ApplicationV2#_render's handling of options.force.
     openTracker.render(true);
     return;
   }
@@ -585,11 +529,6 @@ Hooks.once("init", async () => {
   });
 });
 
-// Foundry's main Sidebar is itself an ApplicationV2 (HandlebarsApplicationMixin),
-// so it fires the same render<ClassName> hook convention as other apps -
-// "renderSidebar" here. Its tab nav lives at <aside id="sidebar"> ->
-// <nav class="tabs"> -> <menu>. Unlike the Party sheet, the sidebar rarely
-// re-renders after startup, so a simple idempotent injection is safe here.
 Hooks.on("renderSidebar", (app, element) => {
   const menu = element.querySelector("nav.tabs > menu");
   if (!menu || menu.querySelector(".axeom-open-factions")) return;

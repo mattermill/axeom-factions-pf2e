@@ -1,9 +1,11 @@
 {
   "id": "axeom-factions-pf2e",
   "title": "Axeom Factions PF2e",
-  "url": "https://github.com/mattermill/axeom-factions-pf2e",
+  "url": "#{URL}#",
+  "manifest": "#{MANIFEST}#",
+  "download": "#{DOWNLOAD}#",
   "description": "Reputation tracking for Pathfinder 2e.",
-  "version": "0.1",
+  "version": "#{VERSION}#",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -15,7 +17,7 @@
         "type": "system",
         "manifest": "https://github.com/foundryvtt/pf2e/releases/latest/download/system.json",
         "compatibility": {
-          "minimum": "5.9.0"
+          "minimum": "8.4.0"
         }
       }
     ]
