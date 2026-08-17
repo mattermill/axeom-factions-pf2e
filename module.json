@@ -2,7 +2,7 @@
   "id": "axeom-factions-pf2e",
   "title": "Axeom Factions PF2e",
   "url": "https://github.com/mattermill/axeom-factions-pf2e",
-  "description": "Faction reputation tracking for Pathfinder 2e.",
+  "description": "Reputation tracking for Pathfinder 2e.",
   "version": "0.1",
   "compatibility": {
     "minimum": "14",

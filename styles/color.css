@@ -14,6 +14,8 @@
     --ax-wine: #5a141e;
 
     --ax-linear-gold: linear-gradient(#7e7165, #634b35);
+
+    --ax-ease: cubic-bezier(0.75, 0, 0.25, 1);
 }
 
 .axeom {

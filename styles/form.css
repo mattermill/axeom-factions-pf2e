@@ -14,8 +14,8 @@
         letter-spacing: 5%;
         text-transform: uppercase;
         transition:
-            background 150ms cubic-bezier(0.75, 0, 0.25, 1),
-            transform 50ms cubic-bezier(0.75, 0, 0.25, 1);
+            background 150ms var(--ax-ease),
+            transform 50ms var(--ax-ease);
 
         &:hover {
             background: linear-gradient(var(--ax-gold), #634b35);
@@ -54,8 +54,8 @@
         letter-spacing: 5%;
         text-transform: uppercase;
         transition:
-            background 300ms cubic-bezier(0.75, 0, 0.25, 1),
-            transform 50ms cubic-bezier(0.75, 0, 0.25, 1);
+            background 300ms var(--ax-ease),
+            transform 50ms var(--ax-ease);
     }
     .ax-tag > .inner {
         display: flex;
@@ -96,7 +96,7 @@
         text-align: left;
         cursor: pointer;
         user-select: none;
-        transition: background 150ms cubic-bezier(0.75, 0, 0.25, 1);
+        transition: background 150ms var(--ax-ease);
 
         &:hover:not(.active) {
             background: var(--ax-bg-hover);
@@ -160,8 +160,8 @@
         visibility: hidden;
         transform: translateY(-4px);
         transition:
-            opacity 200ms cubic-bezier(0.75, 0, 0.25, 1),
-            transform 200ms cubic-bezier(0.75, 0, 0.25, 1);
+            opacity 200ms var(--ax-ease),
+            transform 200ms var(--ax-ease);
     }
 
     .ax-dropdown.is-open .ax-dropdown-menu {
@@ -180,8 +180,8 @@
         border-radius: 3px;
         border: none;
         transition:
-            background 300ms cubic-bezier(0.75, 0, 0.25, 1),
-            transform 50ms cubic-bezier(0.75, 0, 0.25, 1);
+            background 300ms var(--ax-ease),
+            transform 50ms var(--ax-ease);
         &:hover {
             background: linear-gradient(var(--ax-gold), #634b35);
         }
@@ -206,8 +206,7 @@
         border-radius: 50%;
         color: var(--ax-gold);
         cursor: pointer;
-        transition:
-            background 150ms cubic-bezier(0.75, 0, 0.25, 1),
+        transition: background 150ms var(--ax-ease);
 
         &:hover {
             background: rgba(17, 17, 17, 1);
@@ -244,7 +243,7 @@
         border: 1px solid var(--ax-gold);
         box-shadow: 0px 0px 13.7931px rgba(0, 0, 0, 0.6);
         border-radius: 50%;
-        transition: background 150ms cubic-bezier(0.75, 0, 0.25, 1);
+        transition: background 150ms var(--ax-ease);
     }
     .ax-button-close .inner {
         display: flex;
@@ -265,9 +264,9 @@
         border-radius: 2px;
 
         transition:
-            width 300ms cubic-bezier(0.75, 0, 0.25, 1),
-            height 300ms cubic-bezier(0.75, 0, 0.25, 1),
-            background 300ms cubic-bezier(0.75, 0, 0.25, 1);
+            width 300ms var(--ax-ease),
+            height 300ms var(--ax-ease),
+            background 300ms var(--ax-ease);
 
         svg {
             transform: rotate(-45deg);

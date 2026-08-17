@@ -51,7 +51,7 @@
     #ax-window-header {
         cursor: grab;
         user-select: none;
-        transition: background 200ms cubic-bezier(0.75, 0, 0.25, 1);
+        transition: background 200ms var(--ax-ease);
     }
 
     .faction-carousel {
@@ -75,9 +75,9 @@
         opacity: 0;
         pointer-events: none;
         transition:
-            opacity 300ms cubic-bezier(0.75, 0, 0.25, 1),
-            transform 300ms cubic-bezier(0.75, 0, 0.25, 1),
-            background 300ms cubic-bezier(0.75, 0, 0.25, 1);
+            opacity 300ms var(--ax-ease),
+            transform 300ms var(--ax-ease),
+            background 300ms var(--ax-ease);
 
         &:hover {
             background: rgba(17, 17, 17, 1);
@@ -139,11 +139,78 @@
             inset 0px 0px 31.6043px 15.8022px rgba(0, 0, 0, 0.32);
         border-radius: 16px;
         padding: var(--size-3);
-        position: relative;
-        transition: border 300ms cubic-bezier(0.75, 0, 0.25, 1);
+        transition: border 300ms var(--ax-ease);
 
         &:hover {
             border-color: rgba(131, 92, 64, 0.5);
+        }
+
+        &.empty {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #17241e 0%,
+                #0c120f 100%
+            );
+            box-shadow:
+                0px 2px 4px 3px rgba(0, 0, 0, 0.25),
+                0px 3px 15px 3px rgba(0, 0, 0, 0.2);
+
+            > .faction-symbol .symbol-inner {
+                background: radial-gradient(
+                    155.48% 83.46% at 50% 16.54%,
+                    #17241e 0%,
+                    #0c120f 100%
+                );
+            }
+        }
+        &.revered {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #471963 0%,
+                #370257 100%
+            );
+        }
+        &.admired {
+            background: radial-gradient(
+                75% 70% at 50% 20%,
+                #00323d 0%,
+                #00252e 100%
+            );
+        }
+        &.liked {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #2a4839 0%,
+                #0d261a 100%
+            );
+        }
+        &.ignored {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #291f17 0%,
+                #140f0d 100%
+            );
+        }
+        &.disliked {
+            background: radial-gradient(
+                150% 80% at 50% 16%,
+                #222628 0%,
+                #171b1d 100%
+            );
+        }
+        &.hated {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #1a1a1a 0%,
+                #0a0a0a 100%
+            );
+        }
+        &.hunted {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #620412 0%,
+                #2e1216 100%
+            );
         }
     }
 
@@ -190,6 +257,68 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        .symbol-inner {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #222628 0%,
+                #171b1d 100%
+            );
+        }
+        &.revered {
+            background: #7e6d53;
+            border-color: var(--ax-gold);
+        }
+        &.revered > .symbol-inner {
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #8a3cae 0%,
+                #641f84 100%
+            );
+            border-color: var(--ax-gold);
+        }
+        &.admired > .symbol-inner {
+            background: radial-gradient(
+                75% 70% at 50% 20%,
+                #00323d 0%,
+                #00252e 100%
+            );
+        }
+        &.liked > .symbol-inner {
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #2a4839 0%,
+                #0d261a 100%
+            );
+        }
+        &.ignored > .symbol-inner {
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #423728 0%,
+                #140f0d 100%
+            );
+        }
+        &.disliked > .symbol-inner {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #34484d 0%,
+                #192e33 100%
+            );
+        }
+        &.hated > .symbol-inner {
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #9c2039 0%,
+                #590e19 100%
+            );
+        }
+        &.hunted > .symbol-inner {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #222628 0%,
+                #171b1d 100%
+            );
+        }
     }
 
     .faction-symbol > .symbol-inner {
@@ -273,7 +402,7 @@
         border-radius: 6px;
         border: none;
         margin-top: -2rem;
-        transition: border-color 300ms cubic-bezier(0.75, 0, 0.25, 1);
+        transition: border-color 300ms var(--ax-ease);
 
         > .inner {
             background: var(--ax-coal);
@@ -303,10 +432,10 @@
         overflow: hidden;
         transform: translateY(-4px);
         transition:
-            max-height 300ms cubic-bezier(0.75, 0, 0.25, 1),
-            margin-top 300ms cubic-bezier(0.75, 0, 0.25, 1),
-            opacity 300ms cubic-bezier(0.75, 0, 0.25, 1),
-            transform 300ms cubic-bezier(0.75, 0, 0.25, 1);
+            max-height 300ms var(--ax-ease),
+            margin-top 300ms var(--ax-ease),
+            opacity 300ms var(--ax-ease),
+            transform 300ms var(--ax-ease);
     }
 
     .event-input:focus-within .event-details {
@@ -357,8 +486,8 @@
         opacity: 0;
         transition:
             opacity 0.2s,
-            background 300ms cubic-bezier(0.75, 0, 0.25, 1),
-            border-color 300ms cubic-bezier(0.75, 0, 0.25, 1);
+            background 300ms var(--ax-ease),
+            border-color 300ms var(--ax-ease);
     }
 
     .event-entry:hover .event-remove {
@@ -392,75 +521,6 @@
         font: 600 2rem / 1 var(--serif);
     }
 
-    .faction-banner {
-        &.empty {
-            background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #17241e 0%,
-                #0c120f 100%
-            );
-            box-shadow:
-                0px 2px 4px 3px rgba(0, 0, 0, 0.25),
-                0px 3px 15px 3px rgba(0, 0, 0, 0.2);
-
-            > .faction-symbol .symbol-inner {
-                background: radial-gradient(
-                    155.48% 83.46% at 50% 16.54%,
-                    #17241e 0%,
-                    #0c120f 100%
-                );
-            }
-        }
-        &.revered {
-            background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #471963 0%,
-                #370257 100%
-            );
-        }
-        &.admired {
-            background: radial-gradient(
-                75% 70% at 50% 20%,
-                #00323d 0%,
-                #00252e 100%
-            );
-        }
-        &.liked {
-            background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #2a4839 0%,
-                #0d261a 100%
-            );
-        }
-        &.ignored {
-            background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #291f17 0%,
-                #140f0d 100%
-            );
-        }
-        &.disliked {
-            background: radial-gradient(
-                150% 80% at 50% 16%,
-                #222628 0%,
-                #171b1d 100%
-            );
-        }
-        &.hated {
-            background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #1a1a1a 0%,
-                #0a0a0a 100%
-            );
-        }
-        &.hunted {
-            background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #620412 0%,
-                #2e1216 100%
-            );
-        }
-    }
     .ax-tag {
         .inner {
             background: #1f2224;
@@ -485,74 +545,6 @@
         }
         &.hunted > .inner {
             background: #1a1a1a;
-        }
-    }
-    .faction-symbol {
-        .symbol-inner {
-            background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #222628 0%,
-                #171b1d 100%
-            );
-        }
-        &.revered {
-            background: #7e6d53;
-            border-color: var(--ax-gold);
-        }
-        &.revered > .symbol-inner {
-            background: radial-gradient(
-                75% 70% at 50% 16%,
-                #8a3cae 0%,
-                #641f84 100%
-            );
-            border-color: var(--ax-gold);
-        }
-        &.admired > .symbol-inner {
-            background: radial-gradient(
-                75% 70% at 50% 20%,
-                #00323d 0%,
-                #00252e 100%
-            );
-        }
-        &.liked > .symbol-inner {
-            /*background: radial-gradient(
-                75% 70% at 50% 16%,
-                #387f62 0%,
-                #003f36 100%
-            );*/
-            background: radial-gradient(
-                75% 70% at 50% 16%,
-                #2a4839 0%,
-                #0d261a 100%
-            );
-        }
-        &.ignored > .symbol-inner {
-            background: radial-gradient(
-                75% 70% at 50% 16%,
-                #423728 0%,
-                #140f0d 100%
-            );
-        }
-        &.disliked > .symbol-inner {
-            background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #34484d 0%,
-                #192e33 100%
-            );
-        }
-        &.hated > .symbol-inner {
-            background: radial-gradient(
-                75% 70% at 50% 16%,
-                #9c2039 0%,
-                #590e19 100%
-            );
-        }
-        &.hunted > .symbol-inner {
-            background: radial-gradient(
-                155.48% 83.46% at 50% 16.54%,
-                #222628 0%,
-                #171b1d 100%
-            );
         }
     }
 }
