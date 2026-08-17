@@ -65,7 +65,7 @@
                     <input
                         type="text"
                         class="event-note flex-1"
-                        placeholder="What happened?"
+                        placeholder="Add a new event…"
                         value="{{draft.note}}"
                         autocomplete="off"
                         data-1p-ignore
@@ -86,17 +86,8 @@
                                     type="button"
                                     class="event-decrease ax-icon-button ghost"
                                     data-action="adjustAmount"
-                                    data-amount="-5"
-                                    title="Decrease by 5"
-                                >
-                                    <i class="fa-solid fa-angles-down"></i>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="event-decrease ax-icon-button ghost"
-                                    data-action="adjustAmount"
                                     data-amount="-1"
-                                    title="Decrease by 1"
+                                    title="Decrease by 1 (shift-click for 5)"
                                 >
                                     <i class="fa-solid fa-minus"></i>
                                 </button>
@@ -118,18 +109,9 @@
                                     class="event-increase ax-icon-button ghost"
                                     data-action="adjustAmount"
                                     data-amount="1"
-                                    title="Increase by 1"
+                                    title="Increase by 1 (shift-click for 5)"
                                 >
                                     <i class="fa-solid fa-plus"></i>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="event-increase ax-icon-button ghost"
-                                    data-action="adjustAmount"
-                                    data-amount="5"
-                                    title="Increase by 5"
-                                >
-                                    <i class="fa-solid fa-angles-up"></i>
                                 </button>
                             </div>
                         </div>

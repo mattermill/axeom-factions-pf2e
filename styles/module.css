@@ -174,7 +174,7 @@
     }
 
     .faction-symbol {
-        width: 64px;
+        width: 72px;
         aspect-ratio: 1 / 1;
         border-radius: 50%;
         box-shadow:
@@ -242,6 +242,10 @@
             line-clamp: 2;
             text-overflow: ellipsis;
             text-align: center;
+
+            &.no-activity {
+                opacity: 0.6;
+            }
         }
         .timestamp {
             color: var(--ax-gold);
@@ -403,8 +407,8 @@
         &.liked {
             background: radial-gradient(
                 155.48% 83.46% at 50% 16.54%,
-                #2f463c 0%,
-                #003321 100%
+                #2a4839 0%,
+                #0d261a 100%
             );
         }
         &.ignored {
@@ -437,6 +441,9 @@
         }
     }
     .ax-tag {
+        .inner {
+            background: #1f2224;
+        }
         &.ignored > .inner {
             background: var(--ax-earth);
         }
@@ -453,32 +460,49 @@
             background: #194c5d;
         }
         &.revered > .inner {
-            background: #290341;
+            background: #783a9f;
         }
         &.hunted > .inner {
             background: #1a1a1a;
         }
     }
     .faction-symbol {
+        .symbol-inner {
+            background: radial-gradient(
+                155.48% 83.46% at 50% 16.54%,
+                #222628 0%,
+                #171b1d 100%
+            );
+        }
+        &.revered {
+            background: #7e6d53;
+            border-color: var(--ax-gold);
+        }
         &.revered > .symbol-inner {
             background: radial-gradient(
                 75% 70% at 50% 16%,
-                #8041a8 0%,
-                #471963 100%
+                #8a3cae 0%,
+                #641f84 100%
             );
+            border-color: var(--ax-gold);
         }
         &.admired > .symbol-inner {
             background: radial-gradient(
-                75% 70% at 50% 16%,
-                #1a6780 0%,
-                #184250 100%
+                75% 70% at 50% 20%,
+                #00323d 0%,
+                #00252e 100%
             );
         }
         &.liked > .symbol-inner {
-            background: radial-gradient(
+            /*background: radial-gradient(
                 75% 70% at 50% 16%,
                 #387f62 0%,
                 #003f36 100%
+            );*/
+            background: radial-gradient(
+                75% 70% at 50% 16%,
+                #2a4839 0%,
+                #0d261a 100%
             );
         }
         &.ignored > .symbol-inner {
