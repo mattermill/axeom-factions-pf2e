@@ -9,7 +9,7 @@
                 </div>
                 <div class="flex gap-2 pr-2 align-center">
                     <div class="ax-dropdown sort-menu">
-                        <button type="button" class="sort-menu-trigger ax-icon-button ghost" data-action="toggleDropdown" aria-label="Sort factions" aria-haspopup="true">
+                        <button type="button" class="sort-menu-trigger ax-icon-button" data-action="toggleDropdown" aria-label="Sort factions" aria-haspopup="true">
                             <i class="fa-sharp fa-solid fa-down-up"></i>
                         </button>
                         <div class="ax-dropdown-menu ax-menu">
@@ -31,34 +31,50 @@
                 </div>
         </div>
 
+            {{#if hasFactions}}
             <div class="faction-carousel">
-                {{#if hasFactions}}
                 <button type="button" class="carousel-arrow carousel-arrow-left" data-action="carouselPrev" aria-label="Scroll factions left">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
-                {{/if}}
                 <div class="faction-list">
-                    {{#if hasFactions}}
                     <div class="faction-track flex gap-4 pl-4 pr-4">
                         {{#each factions}}
                             {{> axeom-faction-banner}}
                         {{/each}}
                     </div>
-                    {{else}}
-                        <div class="no-activity">No factions yet</div>
-                    {{/if}}
                 </div>
-                {{#if hasFactions}}
                 <button type="button" class="carousel-arrow carousel-arrow-right" data-action="carouselNext" aria-label="Scroll factions right">
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
-                {{/if}}
             </div>
+            {{else}}
+            <div class="faction-empty flex gap-4 pl-4 pr-4">
+                <div class="faction-banner empty flex column align-center">
+                    <div class="banner-frame"></div>
+                    <div class="empty-content flex column gap-3 items-center w-full p-3">
+                        <div class="faction-symbol">
+                            <div class="symbol-inner">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                        </div>
+                        <div class="faction-name">Create a Faction</div>
+                        <div class="empty-divider"></div>
+                        <p class="empty-description">Add your first faction to start tracking reputation</p>
+                        {{#if isOwner}}
+                        <button type="button" class="ax-button empty-cta" data-action="addFaction">
+                            <div class="inner">New Faction</div>
+                        </button>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            {{/if}}
 
 
         </div>
 
         <div class="event-history flex column p-3 gap-3">
+            {{#if hasFactions}}
             {{#if isOwner}}
             <div class="event-input">
                 <div class="inner flex column gap-2 p-3">
@@ -131,8 +147,12 @@
                 <span class="eyebrow">Event history</span>
             </div>
 
-            <div class="event-log flex column">
+            {{/if}}
 
+
+
+            <div class="event-log flex column">
+                {{#if hasEvents}}
                 {{#each events}}
                 <div class="event-entry flex gap-2 align-center p-1 {{#if positive}}positive{{else}}negative{{/if}}" data-faction-id="{{factionId}}">
                     <div class="faction-symbol {{level}}" data-faction-id="{{factionId}}">
@@ -168,6 +188,11 @@
 
                 </div>
                 {{/each}}
+                {{else}}
+                <div class="event-log-empty flex w-full h-full items-center align-center justify-center">
+                    No activity yet
+                </div>
+                {{/if}}
             </div>
         </div>
 </div>

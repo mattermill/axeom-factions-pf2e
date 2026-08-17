@@ -497,7 +497,8 @@ class FactionTrackerApp extends foundry.applications.api.HandlebarsApplicationMi
     event.preventDefault();
     const input = this.element.querySelector(".event-amount");
     if (!input) return;
-    const delta = (parseInt(target.dataset.amount) || 0) * (event.shiftKey ? 5 : 1);
+    const delta =
+      (parseInt(target.dataset.amount) || 0) * (event.shiftKey ? 5 : 1);
     const next = (parseInt(input.value) || 0) + delta;
     input.value = next;
     this._draft.amount = next;
