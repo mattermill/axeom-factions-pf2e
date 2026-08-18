@@ -7,7 +7,7 @@
 
   "url": "https://github.com/mattermill/axeom-factions-pf2e",
   "manifest": "https://raw.githubusercontent.com/mattermill/axeom-factions-pf2e/main/module.json",
-  "download": "https://github.com/mattermill/axeom-factions-pf2e/releases/latest/download/axeom-factions-pf2e.zip"
+  "download": "https://github.com/mattermill/axeom-factions-pf2e/releases/latest/download/axeom-factions-pf2e.zip",
 
   "compatibility": {
     "minimum": "14",
