@@ -4,7 +4,7 @@ env:
   project_url: "https://github.com/${{ github.repository }}"
   latest_manifest_url: "https://github.com/${{ github.repository }}/releases/latest/download/module.json"
   release_manifest_url: "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/module.json"
-  release_download_url: "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/axeom-factions-pf2e.zip"
+  release_download_url: "https://github.com/${{ github.repository }}/releases/latest/download/axeom-factions-pf2e.zip"
   release_notes_url: "https://github.com/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}"
 
 on:
